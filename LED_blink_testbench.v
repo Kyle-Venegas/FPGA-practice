@@ -4,32 +4,44 @@
 
 `timescale 1ns/10ps
 
-module LED_blink_TB ();
+module LED_blink_TB (); // no inputs/outputs
 
-reg r_Clk = 1'b0;
+    reg r_Clk = 1'b0;
 
-// always clk = ~clk;
-// never executed, always at 0 time units
-//
-// always #10 clk = ~clk;
-// executes every 10 time units, acting as time delay
-// needs #x when testbenching
+    // always clk = ~clk;
+    // never executed, always at 0 time units
+    //
+    // always #10 clk = ~clk;
+    // executes every 10 time units, acting as time delay
+    // needs #x when testbenching
 
-always #1 r_Clk = ~r_Clk;
+    always #1 r_Clk = ~r_Clk;
 
-LED_blink 
-#(
-    .g_COUNT_10HZ(),
-    .g_COUNT_5HZ(),
-    .g_COUNT_2HZ(),
-    .g_COUNT_10HZ()
-) LED_blink_inst
-(
+    LED_blink 
+    #(
+       .g_COUNT_10HZ(),
+       .g_COUNT_5HZ(),
+       .g_COUNT_2HZ(),
+       .g_COUNT_10HZ()
+    ) LED_blink_inst
+    (
     .i_Clk(r_Clk),
-    .o_LED_1(),
+    .o_LED_1(),     // no need to map it, we just need the signals
     .o_LED_2(),
     .o_LED_4(),
     .o_LED_4()
-);
+    );
+
+    initial begin
+        $display("Starting testbench...");
+        #200;
+        $finish();
+    end
+
+    initial begin
+        // to dump signals to EPWave
+        $dumpfile("dump.vcd");
+        $dumpvars(0);
+    end
 
 endmodule
