@@ -10,10 +10,10 @@ module LED_blink
 )
 (
   input       i_Clk,
-  output reg  o_LED_1 = 1b'0,
-  output reg  o_LED_2 = 1b'0,
-  output reg  o_LED_3 = 1b'0,
-  output reg  o_LED_4 = 1b'0
+  output reg  o_LED_1 = 0,
+  output reg  o_LED_2 = 0,
+  output reg  o_LED_3 = 0,
+  output reg  o_LED_4 = 0
 );
 
   reg [31:0] r_count_10hz = 0;
