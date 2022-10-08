@@ -17,9 +17,9 @@ module LED_blink
 );
 
   reg [31:0] r_count_10hz = 0;
+  reg [31:0] r_count_5hz = 0;
   reg [31:0] r_count_2hz = 0;
-  reg [31:0] r_count_3hz = 0;
-  reg [31:0] r_count_4hz = 0;
+  reg [31:0] r_count_1hz = 0;
 
   always @(posedge i_Clk)
   begin
@@ -36,7 +36,7 @@ module LED_blink
   begin
     if (r_count_5hz == g_COUNT_5HZ)
     begin
-      o_LED_3 <= ~o_LED_3;
+      o_LED_2 <= ~o_LED_2;
       r_count_5hz <= 0;
     end
     else 
@@ -47,7 +47,7 @@ module LED_blink
   begin
     if (r_count_2hz == g_COUNT_2HZ)
     begin
-      o_LED_2 <= ~o_LED_2;
+      o_LED_3 <= ~o_LED_3;
       r_count_2hz <= 0;
     end
     else 
@@ -58,7 +58,7 @@ module LED_blink
   begin
     if (r_count_1hz == g_COUNT_1HZ)
     begin
-      o_LED_1 <= ~o_LED_1;
+      o_LED_4 <= ~o_LED_4;
       r_count_1hz <= 0;
     end
     else 

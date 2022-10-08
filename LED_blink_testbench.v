@@ -2,8 +2,6 @@
 // spec: 25 MHz
 // LEARN ABOUT always block (https://www.chipverify.com/verilog/verilog-always-block)
 
-`timescale 1ns/10ps
-
 module LED_blink_TB (); // no inputs/outputs
 
     reg r_Clk = 1'b0;
@@ -19,10 +17,10 @@ module LED_blink_TB (); // no inputs/outputs
 
     LED_blink 
     #(
-       .g_COUNT_10HZ(),
-       .g_COUNT_5HZ(),
-       .g_COUNT_2HZ(),
-       .g_COUNT_10HZ()
+       .g_COUNT_10HZ(5),
+       .g_COUNT_5HZ(10),
+       .g_COUNT_2HZ(25),
+       .g_COUNT_1HZ(50)
     ) LED_blink_inst
     (
     .i_Clk(r_Clk),
