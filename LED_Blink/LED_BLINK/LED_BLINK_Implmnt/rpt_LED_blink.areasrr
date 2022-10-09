@@ -1,0 +1,35 @@
+#### START OF AREA REPORT #####[
+
+Part:			ICE40HX1KVQ100 (Lattice)
+
+-------------------------------------------------------------------------
+########   Utilization report for  Top level view:   LED_blink   ########
+=========================================================================
+
+SEQUENTIAL ELEMENTS
+Name      Total elements     Utilization     Notes
+--------------------------------------------------
+FLOPS     132                100 %                
+==================================================
+Total SEQUENTIAL ELEMENTS in the block LED_blink:	132 (29.01 % Utilization)
+
+
+COMBINATIONAL LOGIC
+Name       Total elements     Utilization     Notes
+---------------------------------------------------
+LUTS       164                100 %                
+CARRYS     152                100 %                
+===================================================
+Total COMBINATIONAL LOGIC in the block LED_blink:	316 (69.45 % Utilization)
+
+
+IO PADS
+Name     Total elements     Utilization     Notes
+-------------------------------------------------
+PADS     5                  100 %                
+=================================================
+Total IO PADS in the block LED_blink:	5 (1.10 % Utilization)
+
+
+##### END OF AREA REPORT #####]
+

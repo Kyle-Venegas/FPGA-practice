@@ -1,0 +1,12 @@
+@P:  Worst Slack : 31.989
+@P:  i_Clk - Estimated Frequency : 124.8 MHz
+@P:  i_Clk - Requested Frequency : 25.0 MHz
+@P:  i_Clk - Estimated Period : 8.011
+@P:  i_Clk - Requested Period : 40.000
+@P:  i_Clk - Slack : 31.989
+@P: LED_blink Part : ice40hx1kvq100
+@P: LED_blink I/O primitives : 5
+@P: LED_blink I/O Register bits : 0
+@P: LED_blink Register bits (Non I/O) : 132 (10%)
+@P: LED_blink Total Luts : 164 (12%)
+@P:  CPU Time : 0h:00m:00s
