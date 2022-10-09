@@ -1,8 +1,0 @@
-@W: FX1039 :"c:\users\kyle\downloads\github\fpga-projects\led_blink\led_blink_self.v":57:2:57:7|User-specified initial value defined for instance r_count_1hz[31:0] is being ignored. 
-@W: FX1039 :"c:\users\kyle\downloads\github\fpga-projects\led_blink\led_blink_self.v":46:2:46:7|User-specified initial value defined for instance r_count_2hz[31:0] is being ignored. 
-@W: FX1039 :"c:\users\kyle\downloads\github\fpga-projects\led_blink\led_blink_self.v":35:2:35:7|User-specified initial value defined for instance r_count_5hz[31:0] is being ignored. 
-@W: FX1039 :"c:\users\kyle\downloads\github\fpga-projects\led_blink\led_blink_self.v":24:2:24:7|User-specified initial value defined for instance r_count_10hz[31:0] is being ignored. 
-@W: FX1039 :"c:\users\kyle\downloads\github\fpga-projects\led_blink\led_blink_self.v":57:2:57:7|User-specified initial value defined for instance o_LED_4 is being ignored. 
-@W: FX1039 :"c:\users\kyle\downloads\github\fpga-projects\led_blink\led_blink_self.v":46:2:46:7|User-specified initial value defined for instance o_LED_3 is being ignored. 
-@W: FX1039 :"c:\users\kyle\downloads\github\fpga-projects\led_blink\led_blink_self.v":35:2:35:7|User-specified initial value defined for instance o_LED_2 is being ignored. 
-@W: FX1039 :"c:\users\kyle\downloads\github\fpga-projects\led_blink\led_blink_self.v":24:2:24:7|User-specified initial value defined for instance o_LED_1 is being ignored. 

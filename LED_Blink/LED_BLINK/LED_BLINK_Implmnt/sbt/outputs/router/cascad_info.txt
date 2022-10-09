@@ -1,4 +1,0 @@
-[VIC]
-o_LED_13_THRU_CO_cascade_=ltout:in2
-o_LED_33_THRU_CO_cascade_=ltout:in2
-o_LED_43_THRU_CO_cascade_=ltout:in2
