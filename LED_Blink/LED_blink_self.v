@@ -4,7 +4,7 @@
 module LED_blink
 #(
   parameter g_COUNT_10HZ  = 1250000,
-  parameter g_COUNT_5HZ   = 250000,
+  parameter g_COUNT_5HZ   = 2500000,
   parameter g_COUNT_2HZ   = 6250000,
   parameter g_COUNT_1HZ   = 12500000
 )
