@@ -56,7 +56,7 @@ module UART_RX #(
 
     reg [2:0] r_SM_Main     = 0;    // SM = State machine: 3 bits for the parameter states
     reg [7:0] r_Clock_Count = 0;    // 2^8 = 256; CLKS_PER_BIT req is 217, our counter
-    reg [2:0] r_Bit_Index   = 0:    // 
+    reg [2:0] r_Bit_Index   = 0:    // 2^3 = 8; there's total 8 indexes in the byte
     reg RX_DV               = 0;    //
     reg [7:0] r_RX_Byte     = 0;
 
@@ -72,25 +72,66 @@ module UART_RX #(
                 if (i_RX_Serial == 1'b0) 
                     r_SM_Main <= RX_START_BIT;
                 else 
-                    r_SM_Main <= IDLE;
+                    r_SM_Main <= IDLE;      // doesn't work like a while loop, must assign again next clk posedge
             end
 
-            RX_START_BIT: begin             // check middle of start bit
+            RX_START_BIT: begin             // check middle of start bit, not starting to sample yet
                 if (r_Clock_Count == (CLKS_PER_BIT-1)/2) begin  // (CLKS_PER_BIT-1)/2 = middle of a bit. baud rate and freq depedent 
                     if (i_RX_Serial == 1'b0) begin
+                        r_SM_Main       <= RX_DATA_BITS;    // next state: start receiving
                         r_Clock_Count   <= 0;               // reset clock counter
-                        r_SM_Main       <= RX_DATA_BITS;
                     end else
-                        r_SM_Main       <= IDLE;
+                        r_SM_Main <= IDLE;                  // false alarm, go back to idle
                 end else begin
-                    r_Clock_Count <= r_Clock_Count + 1;     // increment counter
-                    r_SM_Main     <= RX_START_BIT;
+                    r_Clock_Count   <= r_Clock_Count + 1;   // increment counter until middle is found while in RX_START_BIT state
+                    r_SM_Main       <= RX_START_BIT;
                 end
             end
-        
 
-            
+            RX_DATA_BITS: begin             // RX_START_BIT confirmed, must wait after CLKS_PER_BIT-1 before sampling
+                if (r_Clock_Count < CLKS_PER_BIT-1) begin
+                    r_SM_Main       <= RX_DATA_BITS;
+                    r_Clock_Count   <= r_Clock_Count + 1;
+                end else begin              // wait over, reset clk, now sample received serial
+                    r_Clock_Count   <= 0;
+                    r_RX_Byte[r_Bit_Index]  <= i_RX_Serial; // bit is sampled
+
+                    /* must continue to sample the rest of the bits
+                    r_bit_index must be incremented next posedge to sample in that location
+                    while in RX_DATA_BITS state */
+                    if (r_Bit_Index < 7) begin
+                        r_Bit_Index <= r_Bit_Index + 1;
+                        r_SM_Main   <= RX_DATA_BITS;
+                    end else begin          // all bits sampled, must go to next state, no going to IDLE
+                        r_Bit_Index <= 0;   // reset position
+                        r_SM_Main   <= RX_STOP_BIT;
+                    end
+                end
+            end
+
+            RX_STOP_BIT: begin
+                if (r_Clock_Count < CLKS_PER_BIT-1) begin
+                    r_SM_Main       <= RX_STOP_BIT;
+                    r_Clock_Count   <= r_Clock_Count+1;
+                end else begin
+                    r_RX_DV         <= 1'b1;
+                    r_Clock_Count   <= 0;
+                    r_SM_Main       <= CLEANUP;
+                end
+            end
+
+            CLEANUP: begin
+                r_SM_Main   <= IDLE;
+                r_RX_DV     <= 1'b0;
+            end
+
+            default: 
+                r_SM_Main <= IDLE;  // should always have a default state because of loop
+
         endcase
     end
+
+    assign o_RX_DV      = r_RX_DV;
+    assign o_RX_Byte    = r_RX_Byte;
 
 endmodule
