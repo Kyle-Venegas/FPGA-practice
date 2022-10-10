@@ -38,8 +38,7 @@ module UART_RX #(
     //              = 217
     // goes in the top for mapping diff possible testbench clks_per_bit
     parameter CLKS_PER_BIT = 217    
-)
-(
+) (
     input   i_Clk,
     input   i_RX_Serial,        // Serial Data stream
     output  o_RX_DV,            // Stop bit?
