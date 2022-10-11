@@ -17,6 +17,7 @@ module UART_RX_TB ();
     // task: use when procedure has any timing ctrol constructs, zero/more outputs, 1/more inputs
     task UART_Write_Byte;
         input [7:0] i_Data;
+        integer i;
         begin
             // send start bit
             r_RX_Serial <= 1'b0;
@@ -24,9 +25,9 @@ module UART_RX_TB ();
             #1000;
 
             // send data byte
-            for (int i=0; i<8; i++) begin
+            for (i=0; i<8; i=i+1) begin
                 r_RX_Serial <= i_Data[i];
-                #(c_BIT_PERIOD)
+                #(c_BIT_PERIOD);
             end
 
             // send stop bit
