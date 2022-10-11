@@ -41,7 +41,7 @@ module UART_RX #(
 ) (
     input   i_Clk,
     input   i_RX_Serial,        // Serial Data stream
-    output  o_RX_DV,            // Stop bit?
+    output  o_RX_DV,            // DV = Data Valid
     output  [7:0] o_RX_Byte     // 1 byte = 8 bits
 );
 
