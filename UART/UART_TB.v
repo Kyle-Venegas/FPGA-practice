@@ -41,7 +41,7 @@ module UART_RX_TB ();
 
     UART_RX #(
         .CLKS_PER_BIT(c_CLKS_PER_BIT)
-    ) (
+    ) UART_RX_INST (
         .i_Clk(r_Clk),
         .i_RX_Serial(r_RX_Serial),
         .o_RX_DV(),
