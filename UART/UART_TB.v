@@ -56,14 +56,14 @@ module UART_RX_TB ();
     initial begin
         // send command to UART, sends ONE, 
         @(posedge r_Clk);
-        UART_WRITE_BYTE(8'h72); // sends byte 37 in hex, passed in as arg
+        UART_Write_Byte(8'h37); // sends byte 37 in hex, passed in as arg
         @(posedge r_Clk);
 
         // check if correct byte was received
         if (w_RX_Byte == 8'h37)
             $display("Correct byte received");
         else
-            $display("Wrote byte received");
+            $display("Wrong byte received");
         $finish();
     end
 

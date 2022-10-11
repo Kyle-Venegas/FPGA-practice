@@ -39,9 +39,9 @@ module UART_RX #(
     // goes in the top for mapping diff possible testbench clks_per_bit
     parameter CLKS_PER_BIT = 217    
 ) (
-    input   i_Clk,
-    input   i_RX_Serial,        // Serial Data stream
-    output  o_RX_DV,            // DV = Data Valid
+    input         i_Clk,
+    input         i_RX_Serial,  // Serial Data stream
+    output        o_RX_DV,      // DV = Data Valid
     output  [7:0] o_RX_Byte     // 1 byte = 8 bits
 );
 
@@ -56,7 +56,7 @@ module UART_RX #(
     reg [2:0] r_SM_Main     = 0;    // SM = State machine: 3 bits for the parameter states
     reg [7:0] r_Clock_Count = 0;    // 2^8 = 256; CLKS_PER_BIT req is 217, our counter
     reg [2:0] r_Bit_Index   = 0;    // 2^3 = 8; there's total 8 indexes in the byte
-    reg RX_DV               = 0;    //
+    reg       r_RX_DV       = 0;    // Data Valid
     reg [7:0] r_RX_Byte     = 0;
 
     always @(posedge i_Clk ) begin
