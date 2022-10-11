@@ -1,7 +1,7 @@
 // test RX if it receives 0x37 correctly
 
-`timescale 1ns/10ps 
 // specifies time unit and time precision of the module that follows it
+`timescale 1ns/10ps 
 
 module UART_RX_TB ();
 
@@ -29,7 +29,7 @@ module UART_RX_TB ();
             // send data byte
             for (int i=0; i<8; i++) begin
                 r_RX_Serial <= i_Data[i];
-                #(c_BIT_PERIOD)
+                #(c_BIT_PERIOD);
             end
 
             // send stop bit
@@ -62,7 +62,7 @@ module UART_RX_TB ();
         if (w_RX_Byte == 8'h37)
             $display("Correct byte received");
         else
-            $display("Wrote byte received")
+            $display("Wrote byte received");
         $finish();
     end
 
