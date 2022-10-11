@@ -55,7 +55,7 @@ module UART_RX #(
 
     reg [2:0] r_SM_Main     = 0;    // SM = State machine: 3 bits for the parameter states
     reg [7:0] r_Clock_Count = 0;    // 2^8 = 256; CLKS_PER_BIT req is 217, our counter
-    reg [2:0] r_Bit_Index   = 0:    // 2^3 = 8; there's total 8 indexes in the byte
+    reg [2:0] r_Bit_Index   = 0;    // 2^3 = 8; there's total 8 indexes in the byte
     reg RX_DV               = 0;    //
     reg [7:0] r_RX_Byte     = 0;
 
