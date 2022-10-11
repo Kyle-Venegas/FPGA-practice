@@ -15,6 +15,7 @@ module UART_RX_TB ();
     wire [7:0] w_RX_Byte;
 
     // task: use when procedure has any timing ctrl constructs, zero/more outputs, 1/more inputs
+    // does not have to return anything
     // works like a function written in the same file, not like modules
     // takes in byte in hex, serializes it, passes it 1 by 1
     task UART_Write_Byte;
@@ -54,7 +55,7 @@ module UART_RX_TB ();
     initial begin
         // send command to UART, sends ONE, 
         @(posedge r_Clk);
-        UART_WRITE_BYTE(8'h37); // sends byte 37 in hex, passed in as arg
+        UART_WRITE_BYTE(8'h72); // sends byte 37 in hex, passed in as arg
         @(posedge r_Clk);
 
         // check if correct byte was received
