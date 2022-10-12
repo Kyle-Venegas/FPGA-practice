@@ -38,7 +38,7 @@ module UART_RX #(
     //              = 217
     // goes in the top for mapping diff possible testbench clks_per_bit
     // - CLKS_PER_BIT-1 will always be referenced  because of pure 0 bits. 
-    // same way 000 max is 7, but total will be 8 because of the zeroes??
+    // same way 111 max is 7, but total will be 8 because of the zeroes??
     parameter CLKS_PER_BIT = 217    
 ) (
     input         i_Clk,
@@ -69,7 +69,7 @@ module UART_RX #(
             IDLE: begin                     // IDLE case -> send start bit
                 r_RX_DV         <= 1'b0;
                 r_Clock_Count   <= 0;       // reset counter and index in cases where SM is not idle
-                r_Bit_Index     <= 0;
+                r_Bit_Index     <= 0;       // index of received byte
 
                 if (i_RX_Serial == 1'b0)    // start bit received
                     r_SM_Main <= RX_START_BIT;
@@ -92,7 +92,7 @@ module UART_RX #(
             end
 
             RX_DATA_BITS: begin             // RX_START_BIT confirmed, must wait after CLKS_PER_BIT-1 before sampling
-                if (r_Clock_Count < CLKS_PER_BIT-1) begin   // waiting after start bit
+                if (r_Clock_Count < CLKS_PER_BIT-1) begin   // we're still in middle after RX_START_BIT
                     r_SM_Main       <= RX_DATA_BITS;
                     r_Clock_Count   <= r_Clock_Count + 1;
                 end else begin              // wait over, reset clk, now sample received serial

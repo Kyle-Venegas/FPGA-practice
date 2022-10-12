@@ -57,7 +57,7 @@ module UART_RX_TB ();
         // send command to UART, sends ONE, 
         @(posedge r_Clk);
         UART_Write_Byte(8'h37); // sends byte 37 in hex, passed in as arg
-        @(posedge r_Clk);
+        @(posedge r_Clk);       // why trigger posedge twice?
 
         // check if correct byte was received
         if (w_RX_Byte == 8'h37)
