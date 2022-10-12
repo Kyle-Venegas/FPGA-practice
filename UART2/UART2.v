@@ -20,5 +20,11 @@ module UART_TX #(
   output reg  o_tx_serial,
   output reg  o_tx_done
 );
+
+  // 4 states => 2 bits
+  localparam IDLE         = 2'b00;
+  localparam TX_START_BIT = 2'b01;
+  localparam TX_DATA_BIT  = 2'b10;
+  localparam TX_START_BIT = 2'b11;
   
 endmodule
