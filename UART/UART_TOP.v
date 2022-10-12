@@ -1,5 +1,5 @@
 module UART_RX_7Seg_Top (
-  input i_Clk,
+  input i_clk,
   input i_UART_RX,
   // seg1 = upper
   output o_Segment1_A,
@@ -19,7 +19,7 @@ module UART_RX_7Seg_Top (
   output o_Segment2_G);
 
   wire       w_RX_DV;
-  wire [7:0] w_RX_Byte;
+  wire [7:0] w_rx_byte;
 
   wire w_Segment1_A, w_Segment2_A;
   wire w_Segment1_B, w_Segment2_B;
@@ -32,16 +32,16 @@ module UART_RX_7Seg_Top (
   UART_RX #(
     .CLKS_PER_BIT(217)
   ) UART_RX_Inst (
-    .i_Clk(i_Clk),
-    .i_RX_Serial(i_UART_RX),
-    .o_RX_DV(w_RX_DV),
-    .o_RX_Byte(w_RX_Byte)
+    .i_clk(i_clk),
+    .i_rx_serial(i_UART_RX),
+    .o_rx_dv(w_RX_DV),
+    .o_rx_byte(w_rx_byte)
   );
 
   // binary to 7 segment converter upper digit
   Binary_To_7Segment seg1 (
-    .i_Clk(i_Clk),
-    .i_Binary_Num(w_RX_Byte[7:4]),
+    .i_clk(i_clk),
+    .i_Binary_Num(w_rx_byte[7:4]),
     .o_Segment_A(w_Segment1_A),
     .o_Segment_B(w_Segment1_B),
     .o_Segment_C(w_Segment1_C),
@@ -61,8 +61,8 @@ module UART_RX_7Seg_Top (
 
   // binary to 7 segment converter lower digit
   Binary_To_7Segment seg2 (
-    .i_Clk(i_Clk),
-    .i_Binary_Num(w_RX_Byte[3:0]),
+    .i_clk(i_clk),
+    .i_Binary_Num(w_rx_byte[3:0]),
     .o_Segment_A(w_Segment2_A),
     .o_Segment_B(w_Segment2_B),
     .o_Segment_C(w_Segment2_C),

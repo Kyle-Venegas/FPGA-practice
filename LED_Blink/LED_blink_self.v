@@ -9,7 +9,7 @@ module LED_blink
   parameter g_COUNT_1HZ   = 12500000
 )
 (
-  input       i_Clk,
+  input       i_clk,
   output reg  o_LED_1 = 0,
   output reg  o_LED_2 = 0,
   output reg  o_LED_3 = 0,
@@ -21,7 +21,7 @@ module LED_blink
   reg [31:0] r_count_2hz = 0;
   reg [31:0] r_count_1hz = 0;
 
-  always @(posedge i_Clk)
+  always @(posedge i_clk)
   begin
     if (r_count_10hz == g_COUNT_10HZ)
     begin
@@ -32,7 +32,7 @@ module LED_blink
       r_count_10hz <= r_count_10hz + 1;
   end
 
-  always @(posedge i_Clk)
+  always @(posedge i_clk)
   begin
     if (r_count_5hz == g_COUNT_5HZ)
     begin
@@ -43,7 +43,7 @@ module LED_blink
       r_count_5hz <= r_count_5hz + 1;
   end
 
-  always @(posedge i_Clk)
+  always @(posedge i_clk)
   begin
     if (r_count_2hz == g_COUNT_2HZ)
     begin
@@ -54,7 +54,7 @@ module LED_blink
       r_count_2hz <= r_count_2hz + 1;
   end
 
-  always @(posedge i_Clk)
+  always @(posedge i_clk)
   begin
     if (r_count_1hz == g_COUNT_1HZ)
     begin

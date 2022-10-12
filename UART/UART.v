@@ -41,10 +41,10 @@ module UART_RX #(
     // same way 111 max is 7, but total will be 8 because of the zeroes??
     parameter CLKS_PER_BIT = 217    
 ) (
-    input         i_Clk,
-    input         i_RX_Serial,  // Serial Data stream
-    output        o_RX_DV,      // DV = Data Valid
-    output  [7:0] o_RX_Byte     // 1 byte = 8 bits
+    input         i_clk,
+    input         i_rx_serial,  // Serial Data stream
+    output        o_rx_dv,      // DV = Data Valid
+    output  [7:0] o_rx_byte     // 1 byte = 8 bits
 );
 
     // global variable bits for state requirements
@@ -55,86 +55,86 @@ module UART_RX #(
     parameter RX_STOP_BIT  = 3'b011;
     parameter CLEANUP      = 3'b100;
 
-    reg [2:0] r_SM_Main     = 0;    // SM = State machine: 3 bits for the parameter states, initialize to IDLE
-    reg [7:0] r_Clock_Count = 0;    // 2^8 = 256; CLKS_PER_BIT req is 217, our counter
-    reg [2:0] r_Bit_Index   = 0;    // 2^3 = 8; there's total 8 indexes in the byte
+    reg [2:0] o_state     = 0;    // SM = State machine: 3 bits for the parameter states, initialize to IDLE
+    reg [7:0] o_clk_count = 0;    // 2^8 = 256; CLKS_PER_BIT req is 217, our counter
+    reg [2:0] r_bit_index   = 0;    // 2^3 = 8; there's total 8 indexes in the byte
 
-    reg       r_RX_DV       = 0;    // Data Valid
-    reg [7:0] r_RX_Byte     = 0;    // both needs to be put in registers before going in outputs
+    reg       r_rx_dv       = 0;    // Data Valid
+    reg [7:0] r_rx_byte     = 0;    // both needs to be put in registers before going in outputs
 
-    always @(posedge i_Clk ) begin
+    always @(posedge i_clk ) begin
 
         // works like switch-case blocks
-        case (r_SM_Main)
+        case (o_state)
             IDLE: begin                     // IDLE case -> send start bit
-                r_RX_DV         <= 1'b0;
-                r_Clock_Count   <= 0;       // reset counter and index in cases where SM is not idle
-                r_Bit_Index     <= 0;       // index of received byte
+                r_rx_dv         <= 1'b0;
+                o_clk_count   <= 0;       // reset counter and index in cases where SM is not idle
+                r_bit_index     <= 0;       // index of received byte
 
-                if (i_RX_Serial == 1'b0)    // start bit received
-                    r_SM_Main <= RX_START_BIT;
+                if (i_rx_serial == 1'b0)    // start bit received
+                    o_state <= RX_START_BIT;
                 else 
-                    r_SM_Main <= IDLE;      // doesn't work like a while loop, must assign again next clk posedge
-                    // no increment needed to r_Clock_Count while IDLE
+                    o_state <= IDLE;      // doesn't work like a while loop, must assign again next clk posedge
+                    // no increment needed to o_clk_count while IDLE
             end
 
             RX_START_BIT: begin             // check middle of start bit, not starting to sample yet
-                if (r_Clock_Count == (CLKS_PER_BIT-1)/2) begin  // (CLKS_PER_BIT-1)/2 = middle of a bit. baud rate and freq depedent 
-                    if (i_RX_Serial == 1'b0) begin
-                        r_SM_Main       <= RX_DATA_BITS;    // next state: start receiving
-                        r_Clock_Count   <= 0;               // reset clock counter, but we're still situated in the middle
+                if (o_clk_count == (CLKS_PER_BIT-1)/2) begin  // (CLKS_PER_BIT-1)/2 = middle of a bit. baud rate and freq depedent 
+                    if (i_rx_serial == 1'b0) begin
+                        o_state       <= RX_DATA_BITS;    // next state: start receiving
+                        o_clk_count   <= 0;               // reset clock counter, but we're still situated in the middle
                     end else
-                        r_SM_Main <= IDLE;                  // false alarm, go back to idle
+                        o_state <= IDLE;                  // false alarm, go back to idle
                 end else begin
-                    r_Clock_Count   <= r_Clock_Count + 1;   // increment counter until middle is found while in RX_START_BIT state
-                    r_SM_Main       <= RX_START_BIT;        // prog will always go through the else condition b4 getting the middle
+                    o_clk_count   <= o_clk_count + 1;   // increment counter until middle is found while in RX_START_BIT state
+                    o_state       <= RX_START_BIT;        // prog will always go through the else condition b4 getting the middle
                 end
             end
 
             RX_DATA_BITS: begin             // RX_START_BIT confirmed, must wait after CLKS_PER_BIT-1 before sampling
-                if (r_Clock_Count < CLKS_PER_BIT-1) begin   // we're still in middle after RX_START_BIT
-                    r_SM_Main       <= RX_DATA_BITS;
-                    r_Clock_Count   <= r_Clock_Count + 1;
+                if (o_clk_count < CLKS_PER_BIT-1) begin   // we're still in middle after RX_START_BIT
+                    o_state       <= RX_DATA_BITS;
+                    o_clk_count   <= o_clk_count + 1;
                 end else begin              // wait over, reset clk, now sample received serial
-                    r_Clock_Count   <= 0;
-                    r_RX_Byte[r_Bit_Index]  <= i_RX_Serial; // bit is sampled
+                    o_clk_count   <= 0;
+                    r_rx_byte[r_bit_index]  <= i_rx_serial; // bit is sampled
 
                     /* must continue to sample the rest of the bits
                     r_bit_index must be incremented next posedge to sample in that location
                     while in RX_DATA_BITS state */
-                    if (r_Bit_Index < 7) begin
-                        r_Bit_Index <= r_Bit_Index + 1;
-                        r_SM_Main   <= RX_DATA_BITS;
+                    if (r_bit_index < 7) begin
+                        r_bit_index <= r_bit_index + 1;
+                        o_state   <= RX_DATA_BITS;
                     end else begin          // all bits sampled, must go to next state, no going to IDLE
-                        r_Bit_Index <= 0;   // reset position
-                        r_SM_Main   <= RX_STOP_BIT;
+                        r_bit_index <= 0;   // reset position
+                        o_state   <= RX_STOP_BIT;
                     end
                 end
             end
 
             RX_STOP_BIT: begin
-                if (r_Clock_Count < CLKS_PER_BIT-1) begin
-                    r_SM_Main       <= RX_STOP_BIT;
-                    r_Clock_Count   <= r_Clock_Count+1;
+                if (o_clk_count < CLKS_PER_BIT-1) begin
+                    o_state       <= RX_STOP_BIT;
+                    o_clk_count   <= o_clk_count+1;
                 end else begin
-                    r_RX_DV         <= 1'b1;
-                    r_Clock_Count   <= 0;
-                    r_SM_Main       <= CLEANUP;
+                    r_rx_dv         <= 1'b1;
+                    o_clk_count   <= 0;
+                    o_state       <= CLEANUP;
                 end
             end
 
             CLEANUP: begin
-                r_SM_Main   <= IDLE;
-                r_RX_DV     <= 1'b0;
+                o_state   <= IDLE;
+                r_rx_dv     <= 1'b0;
             end
 
             default: 
-                r_SM_Main <= IDLE;  // should always have a default state because of loop
+                o_state <= IDLE;  // should always have a default state because of loop
 
         endcase
     end
 
-    assign o_RX_DV      = r_RX_DV;
-    assign o_RX_Byte    = r_RX_Byte;
+    assign o_rx_dv      = r_rx_dv;
+    assign o_rx_byte    = r_rx_byte;
 
 endmodule

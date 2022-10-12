@@ -1,6 +1,6 @@
 module Binary_To_7Segment 
   (
-   input       i_Clk,
+   input       i_clk,
    input [3:0] i_Binary_Num,
    output      o_Segment_A,
    output      o_Segment_B,
@@ -15,7 +15,7 @@ module Binary_To_7Segment
    
   // Purpose: Creates a case statement for all possible input binary numbers.
   // Drives r_Hex_Encoding appropriately for each input combination.
-  always @(posedge i_Clk)
+  always @(posedge i_clk)
     begin
       case (i_Binary_Num)
         4'b0000 : r_Hex_Encoding <= 7'h7E;
@@ -35,7 +35,7 @@ module Binary_To_7Segment
         4'b1110 : r_Hex_Encoding <= 7'h4F;
         4'b1111 : r_Hex_Encoding <= 7'h47;
       endcase
-    end // always @ (posedge i_Clk)
+    end // always @ (posedge i_clk)
  
   // r_Hex_Encoding[7] is unused
   assign o_Segment_A = r_Hex_Encoding[6];

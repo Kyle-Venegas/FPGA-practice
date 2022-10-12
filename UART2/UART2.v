@@ -11,7 +11,7 @@ display it on two digit 7 segment display, transmit data back to the computer.
 module UART_TX #(
   parameter CLKS_PER_BIT = 217
 ) (
-  input       i_rst,
+  input       i_rst,        // added reset input
   input       i_clk,
   input       i_tx_dv,
   input [7:0] i_tx_byte,
@@ -26,5 +26,19 @@ module UART_TX #(
   localparam TX_START_BIT = 2'b01;
   localparam TX_DATA_BIT  = 2'b10;
   localparam TX_START_BIT = 2'b11;
+
+  reg [2:0]                     r_state;
+  reg [$clog2(CLKS_PER_BIT):0]  r_clk_count;    // set lim to clk_count
+  //reg [2:0]                     r_bit_index;
+  //reg [7:0]                     r_tx_data;
+
+  always @(posedge i_clk ) begin
+    if (~i_rst) begin
+      r_state <= 2'b00;
+    end
+
+
+    
+  end
   
 endmodule

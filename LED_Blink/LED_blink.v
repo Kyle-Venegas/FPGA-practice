@@ -6,7 +6,7 @@ module LED_Blink
   parameter g_COUNT_1HZ  = 12500000     // Conversion: 1Hz = 12500000
 )	 
 (
-  input  i_Clk,
+  input  i_clk,
   output reg o_LED_1 = 1'b0,	// initialize as off
   output reg o_LED_2 = 1'b0,
   output reg o_LED_3 = 1'b0,
@@ -22,7 +22,7 @@ module LED_Blink
   // All processes toggle a specific signal at a different frequency.
   // They all run continuously
   
-  always @(posedge i_Clk)
+  always @(posedge i_clk)
   begin
     if (r_Count_10Hz == g_COUNT_10HZ)     // if reaches 10Hz lim > toggle LED 1, reset
     begin
@@ -33,7 +33,7 @@ module LED_Blink
       r_Count_10Hz <= r_Count_10Hz + 1;   // else increment
   end
 
-  always @(posedge i_Clk)
+  always @(posedge i_clk)
   begin
     if (r_Count_5Hz == g_COUNT_5HZ)
     begin
@@ -44,7 +44,7 @@ module LED_Blink
       r_Count_5Hz <= r_Count_5Hz + 1;
   end
 
-  always @(posedge i_Clk)
+  always @(posedge i_clk)
   begin
     if (r_Count_2Hz == g_COUNT_2HZ)
     begin
@@ -55,7 +55,7 @@ module LED_Blink
       r_Count_2Hz <= r_Count_2Hz + 1;
   end
 
-  always @(posedge i_Clk)
+  always @(posedge i_clk)
   begin
     if (r_Count_1Hz == g_COUNT_1HZ)
     begin

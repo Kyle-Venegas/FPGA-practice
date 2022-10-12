@@ -4,7 +4,7 @@
 
 module LED_blink_TB (); // no inputs/outputs
 
-    reg r_Clk = 1'b0;
+    reg r_clk = 1'b0;
 
     // always clk = ~clk;
     // never executed, always at 0 time units
@@ -13,7 +13,7 @@ module LED_blink_TB (); // no inputs/outputs
     // executes every 10 time units, acting as time delay
     // needs #x when testbenching
 
-    always #1 r_Clk = ~r_Clk;
+    always #1 r_clk = ~r_clk;
 
     LED_blink 
     #(
@@ -23,7 +23,7 @@ module LED_blink_TB (); // no inputs/outputs
        .g_COUNT_1HZ(50)
     ) LED_blink_inst
     (
-    .i_Clk(r_Clk),
+    .i_clk(r_clk),
     .o_LED_1(),     // no need to map it, we just need the signals
     .o_LED_2(),
     .o_LED_4(),
