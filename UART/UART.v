@@ -37,6 +37,8 @@ module UART_RX #(
     //              = 25 MHz / 115200
     //              = 217
     // goes in the top for mapping diff possible testbench clks_per_bit
+    // - CLKS_PER_BIT-1 will always be referenced  because of pure 0 bits. 
+    // same way 000 max is 7, but total will be 8 because of the zeroes??
     parameter CLKS_PER_BIT = 217    
 ) (
     input         i_Clk,
@@ -53,11 +55,12 @@ module UART_RX #(
     parameter RX_STOP_BIT  = 3'b011;
     parameter CLEANUP      = 3'b100;
 
-    reg [2:0] r_SM_Main     = 0;    // SM = State machine: 3 bits for the parameter states
+    reg [2:0] r_SM_Main     = 0;    // SM = State machine: 3 bits for the parameter states, initialize to IDLE
     reg [7:0] r_Clock_Count = 0;    // 2^8 = 256; CLKS_PER_BIT req is 217, our counter
     reg [2:0] r_Bit_Index   = 0;    // 2^3 = 8; there's total 8 indexes in the byte
+
     reg       r_RX_DV       = 0;    // Data Valid
-    reg [7:0] r_RX_Byte     = 0;
+    reg [7:0] r_RX_Byte     = 0;    // both needs to be put in registers before going in outputs
 
     always @(posedge i_Clk ) begin
 
@@ -68,27 +71,28 @@ module UART_RX #(
                 r_Clock_Count   <= 0;       // reset counter and index in cases where SM is not idle
                 r_Bit_Index     <= 0;
 
-                if (i_RX_Serial == 1'b0) 
+                if (i_RX_Serial == 1'b0)    // start bit received
                     r_SM_Main <= RX_START_BIT;
                 else 
                     r_SM_Main <= IDLE;      // doesn't work like a while loop, must assign again next clk posedge
+                    // no increment needed to r_Clock_Count while IDLE
             end
 
             RX_START_BIT: begin             // check middle of start bit, not starting to sample yet
                 if (r_Clock_Count == (CLKS_PER_BIT-1)/2) begin  // (CLKS_PER_BIT-1)/2 = middle of a bit. baud rate and freq depedent 
                     if (i_RX_Serial == 1'b0) begin
                         r_SM_Main       <= RX_DATA_BITS;    // next state: start receiving
-                        r_Clock_Count   <= 0;               // reset clock counter
+                        r_Clock_Count   <= 0;               // reset clock counter, but we're still situated in the middle
                     end else
                         r_SM_Main <= IDLE;                  // false alarm, go back to idle
                 end else begin
                     r_Clock_Count   <= r_Clock_Count + 1;   // increment counter until middle is found while in RX_START_BIT state
-                    r_SM_Main       <= RX_START_BIT;
+                    r_SM_Main       <= RX_START_BIT;        // prog will always go through the else condition b4 getting the middle
                 end
             end
 
             RX_DATA_BITS: begin             // RX_START_BIT confirmed, must wait after CLKS_PER_BIT-1 before sampling
-                if (r_Clock_Count < CLKS_PER_BIT-1) begin
+                if (r_Clock_Count < CLKS_PER_BIT-1) begin   // waiting after start bit
                     r_SM_Main       <= RX_DATA_BITS;
                     r_Clock_Count   <= r_Clock_Count + 1;
                 end else begin              // wait over, reset clk, now sample received serial
