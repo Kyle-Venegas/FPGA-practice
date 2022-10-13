@@ -18,23 +18,49 @@ module UART_TX #(
   output reg  o_tx_byte,
   output reg  o_tx_active,
   output reg  o_tx_serial,
-  output reg  o_tx_done
+  output reg  o_tx_stop
 );
 
-  // 4 states => 2 bits
+  // 4 states for TX => 2 bits
   localparam IDLE         = 2'b00;
   localparam TX_START_BIT = 2'b01;
   localparam TX_DATA_BIT  = 2'b10;
   localparam TX_START_BIT = 2'b11;
 
-  reg [2:0]                     r_state;
+  reg [2:0]                     r_state;        // same bits of RX
   reg [$clog2(CLKS_PER_BIT):0]  r_clk_count;    // set lim to clk_count
   //reg [2:0]                     r_bit_index;
   //reg [7:0]                     r_tx_data;
 
-  always @(posedge i_clk ) begin
+  // TX state machine
+  always @(posedge i_clk or negedge i_rst) begin
     if (~i_rst) begin
-      r_state <= 2'b00;
+      r_state <= 3'b000;
+    end else begin
+      o_tx_stop <= 1'b0;
+    end
+
+    case (r_state) begin
+
+      IDLE: begin
+        o_tx_serial <= 1'b1;  // drive line high for idle
+        r_clk_count <= 0;
+        r_bit_index <= 0;
+
+        if (i_tx_dv == 1'b1) begin
+          o_tx_active <= 1'b1;
+          r_tx_data   <= i_tx_byte;
+          r_state     <= TX_START_BIT;
+        end else
+          r_state <= IDLE;
+      end
+
+      TX_START_BIT: begin
+        
+      end
+      
+
+
     end
 
 
