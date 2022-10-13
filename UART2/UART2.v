@@ -26,13 +26,13 @@ module UART_TX #(
   // 4 states for TX => 2 bits
   localparam IDLE         = 2'b00;
   localparam TX_START_BIT = 2'b01;
-  localparam TX_DATA_BITS  = 2'b10;
+  localparam TX_DATA_BITS = 2'b10;
   localparam TX_STOP_BIT  = 2'b11;
 
   reg [2:0]                     r_state;        // same bits of RX
   reg [$clog2(CLKS_PER_BIT):0]  r_clk_count;    // set lim to clk_count
   reg [2:0]                     r_bit_index;
-  //reg [7:0]                     r_tx_data;
+  reg [7:0]                     r_tx_data;
 
   // TX state machine
   always @(posedge i_clk or negedge i_rst) begin
