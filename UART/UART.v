@@ -55,20 +55,20 @@ module UART_RX #(
     parameter RX_STOP_BIT  = 3'b011;
     parameter CLEANUP      = 3'b100;
 
-    reg [2:0] o_state     = 0;    // SM = State machine: 3 bits for the parameter states, initialize to IDLE
-    reg [7:0] o_clk_count = 0;    // 2^8 = 256; CLKS_PER_BIT req is 217, our counter
-    reg [2:0] r_bit_index   = 0;    // 2^3 = 8; there's total 8 indexes in the byte
+    reg [2:0] o_state     = 0;  // SM = State machine: 3 bits for the parameter states, initialize to IDLE
+    reg [7:0] o_clk_count = 0;  // 2^8 = 256; CLKS_PER_BIT req is 217, our counter
+    reg [2:0] r_bit_index = 0;  // 2^3 = 8; there's total 8 indexes in the byte
 
-    reg       r_rx_dv       = 0;    // Data Valid
-    reg [7:0] r_rx_byte     = 0;    // both needs to be put in registers before going in outputs
+    reg       r_rx_dv   = 0;    // Data Valid
+    reg [7:0] r_rx_byte = 0;    // both needs to be put in registers before going in outputs
 
-    always @(posedge i_clk ) begin
+    always @(posedge i_clk) begin
 
         // works like switch-case blocks
         case (o_state)
             IDLE: begin                     // IDLE case -> send start bit
                 r_rx_dv         <= 1'b0;
-                o_clk_count   <= 0;       // reset counter and index in cases where SM is not idle
+                o_clk_count     <= 0;       // reset counter and index in cases where SM is not idle
                 r_bit_index     <= 0;       // index of received byte
 
                 if (i_rx_serial == 1'b0)    // start bit received
