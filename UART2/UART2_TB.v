@@ -1,6 +1,7 @@
-`timescale 1ns/10ps
+`timescale 1ns/10ps // timescale might be trial and error (for proper wave viewing)
 
-`include "UART_TX.v"
+`include "UART2.v"
+`include "UART.v"
 
 module UART_TB ();
 
