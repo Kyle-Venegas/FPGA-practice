@@ -64,7 +64,7 @@ module UART_RX #(
 
     always @(posedge i_clk) begin
 
-        // works like switch-case blocks
+        // works like switch-case blocks; case doesn't need begin, but needs endcase
         case (o_state)
             IDLE: begin                     // IDLE case -> send start bit
                 r_rx_dv         <= 1'b0;
