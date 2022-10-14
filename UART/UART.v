@@ -96,8 +96,8 @@ module UART_RX #(
                     o_state       <= RX_DATA_BITS;
                     o_clk_count   <= o_clk_count + 1;
                 end else begin              // wait over, reset clk, now sample received serial
-                    o_clk_count   <= 0;
                     r_rx_byte[r_bit_index]  <= i_rx_serial; // bit is sampled
+                    o_clk_count   <= 0;
 
                     /* must continue to sample the rest of the bits
                     r_bit_index must be incremented next posedge to sample in that location
