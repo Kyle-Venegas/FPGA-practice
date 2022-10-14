@@ -22,8 +22,8 @@ module UART_TB ();
       .CLKS_PER_BIT(c_CLKS_PER_BIT)
     ) UART_RX_INST (
       .i_clk(r_clk),
-      .i_rx_serial(r_rx_serial),
-      .o_rx_dv(),
+      .i_rx_serial(w_uart_line),
+      .o_rx_dv(w_rx_dv),
       .o_rx_byte(w_rx_byte)
     );
 
@@ -54,7 +54,7 @@ module UART_TB ();
       r_tx_dv <= 1'b0;
 
       // check if correct byte was received
-      @(posedge r_clk);
+      @(posedge w_rx_dv);
       if (w_rx_byte == 8'h3F)
         $display("Correct byte received");
       else
