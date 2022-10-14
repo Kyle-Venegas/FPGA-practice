@@ -46,26 +46,26 @@ module UART_TB ();
 
     // main test
     initial begin
-        @(posedge r_clk);
-        @(posedge r_clk);
-        r_tx_dv <= 1'b1;
-        r_tx_byte <= 8'h3F;
-        @(posedge r_clk);
-        r_tx_dv <= 1'b0;
+      @(posedge r_clk);
+      @(posedge r_clk);
+      r_tx_dv <= 1'b1;
+      r_tx_byte <= 8'h3F;
+      @(posedge r_clk);
+      r_tx_dv <= 1'b0;
 
-        // check if correct byte was received
-        @(posedge r_clk);
-        if (w_rx_byte == 8'h3F)
-            $display("Correct byte received");
-        else
-            $display("Wrong byte received");
-        $finish();
+      // check if correct byte was received
+      @(posedge r_clk);
+      if (w_rx_byte == 8'h3F)
+        $display("Correct byte received");
+      else
+        $display("Wrong byte received");
+      $finish();
     end
 
     initial begin
-        // dump signals to EPWave
-        $dumpfile("dump.vcd");
-        $dumpvars();
+      // dump signals to EPWave
+      $dumpfile("dump.vcd");
+      $dumpvars();
     end
 
 endmodule

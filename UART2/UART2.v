@@ -17,7 +17,6 @@ module UART_TX #(
   input       i_clk,
   input       i_tx_dv,
   input [7:0] i_tx_byte,
-  output reg  o_tx_byte,
   output reg  o_tx_active,
   output reg  o_tx_serial,
   output reg  o_tx_done
@@ -42,8 +41,7 @@ module UART_TX #(
       o_tx_done <= 1'b0;
     end
 
-    case (r_state) begin
-
+    case (r_state)
       IDLE: begin
         o_tx_serial <= 1'b1;  // drive line high for idle, different from rx_dv
         r_clk_count <= 0;
@@ -63,10 +61,10 @@ module UART_TX #(
         
         if (r_clk_count < CLKS_PER_BIT-1) begin
           r_clk_count <= r_clk_count + 1;
-          r_main      <= TX_START_BIT;
+          r_state     <= TX_START_BIT;
         end else begin
           r_clk_count <= 0;
-          r_main      <= TX_DATA_BITS;
+          r_state     <= TX_DATA_BITS;
         end
       end
 
