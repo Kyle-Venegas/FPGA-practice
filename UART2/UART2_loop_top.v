@@ -40,12 +40,12 @@ module moduleName (
   );
 
   UART_TX #(.CLKS_PER_BIT(217)) UART_TX_Inst (
-    .i_clk(i_clk),      // i_rst not mapped, most likely only for testbenching
-    .i_tx_dv(w_rx_dv),
-    .i_tx_byte(w_rx_byte),
-    .o_tx_active(w_tx_active),
-    .o_tx_serial(w_tx_serial),
-    .o_tx_done()
+    .i_Clock(i_clk),      // i_rst not mapped, most likely only for testbenching
+    .i_TX_DV(w_rx_dv),
+    .i_TX_Byte(w_rx_byte),
+    .o_TX_Active(w_tx_active),
+    .o_TX_Serial(w_tx_serial),
+    .o_TX_Done()
   );
 
   // drive UART line high when TX module not active
