@@ -33,7 +33,7 @@ module moduleName (
 
   // 25MHz / 115200 = 217
   UART_RX #(.CLKS_PER_BIT(217)) UART_RX_Inst (
-    .i_clk(i_clk)
+    .i_clk(i_clk),
     .i_rx_serial(i_uart_rx),
     .o_rx_dv(w_rx_dv), 
     .o_rx_byte(w_rx_byte)   
