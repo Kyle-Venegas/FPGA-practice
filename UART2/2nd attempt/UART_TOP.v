@@ -1,6 +1,6 @@
 module UART_TOP (
   input  clk,
-  input  serial_stream,
+  input  i_UART_RX,
   // seg1 = upper
   output o_Segment1_A,
   output o_Segment1_B,
@@ -31,7 +31,7 @@ module UART_TOP (
 
   UART_RX #(.CLKS_PER_BIT(217)) UART_RX_INST (
     .clk(clk),
-    .serial_stream(serial_stream),
+    .serial_stream(i_UART_RX),
     .rx_byte(rx_byte),
     .data_valid(rx_data_valid)
   );
