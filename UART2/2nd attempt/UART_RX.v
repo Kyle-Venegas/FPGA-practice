@@ -18,7 +18,7 @@ module UART_RX #(parameter CLKS_PER_BIT = 217) (
   
   // temp
   reg       r_data_valid = 0;
-  reg [7:0] r_rx_byte;
+  reg [7:0] r_rx_byte = 0;
 
   always @(posedge clk ) begin
 
