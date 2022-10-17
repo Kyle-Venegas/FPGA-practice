@@ -2,21 +2,21 @@ module UART_TOP (
   input  clk,
   input  serial_stream,
   // seg1 = upper
-  output Segment1_A,
-  output Segment1_B,
-  output Segment1_C,
-  output Segment1_D,
-  output Segment1_E,
-  output Segment1_F,
-  output Segment1_G,
+  output o_Segment1_A,
+  output o_Segment1_B,
+  output o_Segment1_C,
+  output o_Segment1_D,
+  output o_Segment1_E,
+  output o_Segment1_F,
+  output o_Segment1_G,
   // seg2 = lower
-  output Segment2_A,
-  output Segment2_B,
-  output Segment2_C,
-  output Segment2_D,
-  output Segment2_E,
-  output Segment2_F,
-  output Segment2_G);
+  output o_Segment2_A,
+  output o_Segment2_B,
+  output o_Segment2_C,
+  output o_Segment2_D,
+  output o_Segment2_E,
+  output o_Segment2_F,
+  output o_Segment2_G);
 
   wire        rx_data_valid;
   wire [7:0]  rx_byte;
@@ -48,13 +48,13 @@ module UART_TOP (
     .o_Segment_G(w_Segment1_G)
   );
 
-  assign Segment1_A = ~w_Segment1_A;
-  assign Segment1_B = ~w_Segment1_B;
-  assign Segment1_C = ~w_Segment1_C;
-  assign Segment1_D = ~w_Segment1_D;
-  assign Segment1_E = ~w_Segment1_E;
-  assign Segment1_F = ~w_Segment1_F;
-  assign Segment1_G = ~w_Segment1_G;
+  assign o_Segment1_A = ~w_Segment1_A;
+  assign o_Segment1_B = ~w_Segment1_B;
+  assign o_Segment1_C = ~w_Segment1_C;
+  assign o_Segment1_D = ~w_Segment1_D;
+  assign o_Segment1_E = ~w_Segment1_E;
+  assign o_Segment1_F = ~w_Segment1_F;
+  assign o_Segment1_G = ~w_Segment1_G;
 
   Binary_To_7Segment SEG2 (
     .i_clk(clk),
@@ -68,12 +68,12 @@ module UART_TOP (
     .o_Segment_G(w_Segment2_G)
   );
 
-  assign Segment2_A = ~w_Segment2_A;
-  assign Segment2_B = ~w_Segment2_B;
-  assign Segment2_C = ~w_Segment2_C;
-  assign Segment2_D = ~w_Segment2_D;
-  assign Segment2_E = ~w_Segment2_E;
-  assign Segment2_F = ~w_Segment2_F;
-  assign Segment2_G = ~w_Segment2_G;
+  assign o_Segment2_A = ~w_Segment2_A;
+  assign o_Segment2_B = ~w_Segment2_B;
+  assign o_Segment2_C = ~w_Segment2_C;
+  assign o_Segment2_D = ~w_Segment2_D;
+  assign o_Segment2_E = ~w_Segment2_E;
+  assign o_Segment2_F = ~w_Segment2_F;
+  assign o_Segment2_G = ~w_Segment2_G;
 
 endmodule
