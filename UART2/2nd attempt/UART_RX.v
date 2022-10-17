@@ -25,9 +25,9 @@ module UART_RX #(parameter CLKS_PER_BIT = 217) (
     case (state)
 
       IDLE: begin
-        r_data_valid <= 1'b0;
-        counter    <= 0;
-        bit_index  <= 0;
+        r_data_valid  <= 1'b0;
+        counter       <= 0;
+        bit_index     <= 0;
         if (serial_stream == 1'b0) begin  // falling edge detected
           state   <= START_BIT;
         end else
@@ -35,45 +35,45 @@ module UART_RX #(parameter CLKS_PER_BIT = 217) (
       end
 
       START_BIT: begin
-        if (counter == (CLKS_PER_BIT-1/2)) begin     // verify if actual start bit in middle
-          if (serial_stream == 1'b0) begin
-            state   <= SAMPLING;
-            counter <= 0; // still situated in middle next loop
-          end else
-            state <= IDLE;
-        end else begin
+        if (counter < (CLKS_PER_BIT-1)/2) begin
           counter <= counter + 1;
           state   <= START_BIT;
+        end else begin
+          if (serial_stream == 1'b0) begin
+            state   <= SAMPLING;
+            counter <= 0;
+          end else begin
+            state   <= IDLE;
+          end
         end
       end
 
       SAMPLING: begin
-        if (counter > CLKS_PER_BIT-1) begin
-          counter               <= 0;
-          r_rx_byte[bit_index]  <= serial_stream;
-          
+        if (counter < CLKS_PER_BIT-1) begin
+          counter <= counter + 1;
+          state   <= SAMPLING;
+        end else begin
+          r_rx_byte[bit_index] <= serial_stream;
+          counter <= 0;
           if (bit_index < 7) begin
             bit_index <= bit_index + 1;
             state     <= SAMPLING;
           end else begin
             state     <= STOP_BIT;
             bit_index <= 0;
-          end   
-        end else begin
-          counter <= counter + 1;
-          state   <= SAMPLING;
+          end
         end
       end
 
       STOP_BIT: begin
-        if (counter > CLKS_PER_BIT-1) begin
-          if (serial_stream == 1'b1) begin
-            state   <= IDLE;
-            r_data_valid <= 1'b1;
-          end
-        end else
+        if (counter < CLKS_PER_BIT-1) begin
           counter <= counter + 1;
           state   <= STOP_BIT;
+        end else begin
+          r_data_valid  <= 1'b1;
+          counter       <= 0;
+          state         <= IDLE;
+        end
       end
       
       default: begin
