@@ -33,19 +33,19 @@ module UART_TOP (
     .clk(clk),
     .serial_stream(serial_stream),
     .rx_byte(rx_byte),
-    .data_valid(data_valid)
+    .data_valid(rx_data_valid)
   );
 
   Binary_To_7Segment SEG1 (
-    i_clk(clk),
-    i_Binary_Num(rx_byte[7:4]),
-    o_Segment_A(w_Segment1_A),
-    o_Segment_B(w_Segment1_B),
-    o_Segment_C(w_Segment1_C),
-    o_Segment_D(w_Segment1_D),
-    o_Segment_E(w_Segment1_E),
-    o_Segment_F(w_Segment1_F),
-    o_Segment_G(w_Segment1_G)
+    .i_clk(clk),
+    .i_Binary_Num(rx_byte[7:4]),
+    .o_Segment_A(w_Segment1_A),
+    .o_Segment_B(w_Segment1_B),
+    .o_Segment_C(w_Segment1_C),
+    .o_Segment_D(w_Segment1_D),
+    .o_Segment_E(w_Segment1_E),
+    .o_Segment_F(w_Segment1_F),
+    .o_Segment_G(w_Segment1_G)
   );
 
   assign Segment1_A = ~w_Segment1_A;
@@ -57,15 +57,15 @@ module UART_TOP (
   assign Segment1_G = ~w_Segment1_G;
 
   Binary_To_7Segment SEG2 (
-    i_clk(clk),
-    i_Binary_Num(rx_byte[3:0]),
-    o_Segment_A(w_Segment2_A),
-    o_Segment_B(w_Segment2_B),
-    o_Segment_C(w_Segment2_C),
-    o_Segment_D(w_Segment2_D),
-    o_Segment_E(w_Segment2_E),
-    o_Segment_F(w_Segment2_F),
-    o_Segment_G(w_Segment2_G)
+    .i_clk(clk),
+    .i_Binary_Num(rx_byte[3:0]),
+    .o_Segment_A(w_Segment2_A),
+    .o_Segment_B(w_Segment2_B),
+    .o_Segment_C(w_Segment2_C),
+    .o_Segment_D(w_Segment2_D),
+    .o_Segment_E(w_Segment2_E),
+    .o_Segment_F(w_Segment2_F),
+    .o_Segment_G(w_Segment2_G)
   );
 
   assign Segment2_A = ~w_Segment2_A;
