@@ -6,11 +6,11 @@ module UART_RX #(parameter CLKS_PER_BIT = 217) (
   output       data_valid);
 
   // state machine
-  reg       state;
-  parameter IDLE      = 1'b00; 
-  parameter START_BIT = 1'b01;
-  parameter SAMPLING  = 1'b10;
-  parameter STOP_BIT  = 1'b11;
+  reg [1:0]  state;
+  parameter IDLE      = 2'b00; 
+  parameter START_BIT = 2'b01;
+  parameter SAMPLING  = 2'b10;
+  parameter STOP_BIT  = 2'b11;
 
   // counter 
   reg [7:0] counter = 0;
@@ -35,15 +35,16 @@ module UART_RX #(parameter CLKS_PER_BIT = 217) (
       end
 
       START_BIT: begin
-        if (counter > CLKS_PER_BIT-1/2) begin     // verify if actual start bit in middle
-          if (serial_stream == 1'b0)    
+        if (counter == (CLKS_PER_BIT-1/2)) begin     // verify if actual start bit in middle
+          if (serial_stream == 1'b0) begin
             state   <= SAMPLING;
             counter <= 0; // still situated in middle next loop
-          else
+          end else
             state <= IDLE;
-        end else
+        end else begin
           counter <= counter + 1;
           state   <= START_BIT;
+        end
       end
 
       SAMPLING: begin
