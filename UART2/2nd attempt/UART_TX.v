@@ -50,7 +50,21 @@ module UART_TX #(parameter CLKS_PER_BIT = 217) (
       end
 
       STREAMING: begin
+        tx_serial <= r_rx_byte[bit_index];
 
+        if (counter < CLKS_PER_BIT-1) begin
+          counter <= counter + 1;
+          state   <= STREAMING;
+        end else begin
+          counter <= 0;
+          if (bit_index < 7) begin
+            bit_index <= bit_index + 1;
+            state     <= STREAMING;
+          end else begin
+            bit_index <= 0;
+            state     <= STOP_BIT;
+          end
+        end
       end
 
       STOP_BIT: begin // send stop bit out
