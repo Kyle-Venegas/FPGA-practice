@@ -68,7 +68,18 @@ module UART_TX #(parameter CLKS_PER_BIT = 217) (
       end
 
       STOP_BIT: begin // send stop bit out
+        tx_serial <= 1'b1;
 
+        if (counter < CLKS_PER_BIT-1) begin
+          counter <= counter + 1;
+          state   <= STOP_BIT;
+        end else begin
+          counter <= 0;
+          state   <= IDLE;
+          bit_index <= 0;
+          tx_done   <= 1'b1;
+          tx_active <= 1'b0;
+        end
       end
 
       default:
