@@ -39,7 +39,14 @@ module UART_TX #(parameter CLKS_PER_BIT = 217) (
 
       START_BIT: begin      // send out start bit until time for next bit
         tx_serial <= 1'b0;
-
+        
+        if (counter < CLKS_PER_BIT-1) begin
+          counter <= counter + 1;
+          state   <= START_BIT;
+        end else begin
+          counter <= 0;
+          state   <= STREAMING;
+        end
       end
 
       STREAMING: begin
