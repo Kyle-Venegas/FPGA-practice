@@ -26,7 +26,7 @@ module UART_TB ();
     .clk(clk),
     .serial_stream(serial_stream),
     .rx_byte(rx_byte),
-    .data_valid(rx_dv);
+    .data_valid(rx_dv)
   );
 
   UART_TX #(.CLKS_PER_BIT(CLKS_PER_BIT)) UART_TX_INST (
