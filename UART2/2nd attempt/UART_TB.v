@@ -9,17 +9,15 @@ module UART_TB ();
   
   reg clk = 0;
 
-  // temp
-  wire       serial_stream    = 0;
-  wire       tx_serial_stream = 0;
-  wire       tx_active        = 0;
-  wire       w_rx_dv          = 0;
-  wire [7:0] w_rx_byte        = 0;
+  // RX I/O
+  wire       serial_stream = 0;
+  wire [7:0] rx_byte       = 0;
+  wire       rx_dv         = 0;
 
   UART_RX #(.CLKS_PER_BIT(CLKS_PER_BIT)) UART_RX_INST (
     .clk(clk),
     .serial_stream(serial_stream),
-    .rx_byte(w_rx_byte),
+    .rx_byte(rx_byte),
     .data_valid(w_rx_dv);
   );
 
@@ -32,5 +30,12 @@ module UART_TB ();
     .tx_done()
   );
 
+  always #(CLK_PERIOD_NS/2) clk <= !clk;
+
+  initial begin
+    @(posedge clk);
+    @(posedge clk);
+
+  end
 
 endmodule
