@@ -1,6 +1,7 @@
 module UART_TOP (
   input  i_clk,
   input  i_UART_RX,
+  output o_UART_TX,
   // seg1 = upper
   output o_Segment1_A,
   output o_Segment1_B,
@@ -16,10 +17,8 @@ module UART_TOP (
   output o_Segment2_D,
   output o_Segment2_E,
   output o_Segment2_F,
-  output o_Segment2_G);
-
-  wire        rx_data_valid;
-  wire [7:0]  rx_byte;
+  output o_Segment2_G
+  );
 
   wire w_Segment1_A, w_Segment2_A;
   wire w_Segment1_B, w_Segment2_B;
@@ -29,12 +28,31 @@ module UART_TOP (
   wire w_Segment1_F, w_Segment2_F;
   wire w_Segment1_G, w_Segment2_G;
 
+  // RX Outputs
+  wire [7:0]  rx_byte;
+  wire        rx_data_valid;
+
+  // TX Outputs
+  wire tx_serial;
+  wire tx_active;
+
   UART_RX #(.CLKS_PER_BIT(217)) UART_RX_INST (
     .clk(i_clk),
     .serial_stream(i_UART_RX),
     .rx_byte(rx_byte),
     .data_valid(rx_data_valid)
   );
+
+  UART_TX #(.CLKS_PER_BIT(217)) UART_TX_Inst (
+    .clk(i_clk),           
+    .rx_dv(rx_data_valid), 
+    .rx_byte(rx_byte),
+    .tx_serial(tx_serial),
+    .tx_active(tx_active),
+    .tx_done() 
+  );
+
+  assign o_UART_TX = tx_active ? tx_serial = 1'b1;
 
   Binary_To_7Segment SEG1 (
     .i_clk(i_clk),
