@@ -25,7 +25,7 @@ module UART_RX #(parameter CLKS_PER_BIT = 217) (
     case (state)
 
       IDLE: begin
-        r_data_valid  <= 1'b0;
+        r_data_valid  <= 1'b1;
         counter       <= 0;
         bit_index     <= 0;
         if (serial_stream == 1'b0) begin  // falling edge detected
