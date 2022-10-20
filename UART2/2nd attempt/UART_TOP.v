@@ -52,7 +52,7 @@ module UART_TOP (
     .tx_done() 
   );
 
-  assign o_UART_TX = tx_active ? tx_serial = 1'b1;
+  assign o_UART_TX = tx_active ? tx_serial : 1'b1;
 
   Binary_To_7Segment SEG1 (
     .i_clk(i_clk),

@@ -2,9 +2,9 @@ module UART_TX #(parameter CLKS_PER_BIT = 217) (
   input       clk,
   input       rx_dv, // rx module sends out 
   input [7:0] rx_byte,
-  output      tx_serial,
-  output      tx_active,
-  output      tx_done // transfer done, ready for next byte
+  output reg  tx_serial,
+  output reg  tx_active,
+  output reg  tx_done // transfer done, ready for next byte
   );
 
   // states
