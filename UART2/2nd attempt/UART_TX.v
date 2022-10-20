@@ -27,6 +27,7 @@ module UART_TX #(parameter CLKS_PER_BIT = 217) (
         counter   <= 0;
         tx_done   <= 1'b0;
         tx_serial <= 1'b1;  // feed stream 1s
+        tx_active <= 1'b0;
 
         if (rx_dv == 1'b1) begin // trigger next state when rx_dv detected
           tx_active <= 1'b1;
