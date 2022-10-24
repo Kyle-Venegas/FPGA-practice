@@ -10,6 +10,7 @@ module sync_pulse #(
   output reg [9:0] o_col_counter,
   output reg [9:0] o_row_counter
   );
+  // 2^9 = 512; 2^10 = 1024
 
   always @(posedge clk ) begin
     if (o_col_counter == TOTAL_COLS-1) begin
