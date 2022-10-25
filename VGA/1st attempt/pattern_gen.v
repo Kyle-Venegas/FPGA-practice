@@ -18,7 +18,44 @@ module pattern_gen #(
   output reg  [VIDEO_WIDTH-1:0] o_b_val,
   )
 
+wire vsync, hsync;
 
+// patterns have 16 indexes
+wire [VIDEO_WIDTH-1:0] r_pattern[0:15];
+wire [VIDEO_WIDTH-1:0] g_pattern[0:15];
+wire [VIDEO_WIDTH-1:0] b_pattern[0:15];
 
+wire [9:0] col_counter;
+wire [9:0] row_counter;
+
+wire [6:0] bar_width;
+wire [2:0] bar_select;
+
+// sync_count #()
+
+  always @(posedge clk ) begin
+    o_hsync <= hsync;
+    o_vsync <= vsync;
+  end
+
+  // initial
+  assign r_pattern[0] = 0;
+  assign g_pattern[0] = 0;
+  assign b_pattern[0] = 0;
+
+  // pattern 1 all red
+  assign r_pattern[0] = (col_counter < ACTIVE_COLS && row_counter < ACTIVE_ROWS) ? {VIDEO_WIDTH{1'b1}} : 0;
+  assign g_pattern[0] = 0;
+  assign b_pattern[0] = 0;
+
+  // pattern 2 all green
+  assign r_pattern[0] = 0;
+  assign g_pattern[0] = (col_counter < ACTIVE_COLS && row_counter < ACTIVE_ROWS) ? {VIDEO_WIDTH{1'b1}} : 0;
+  assign b_pattern[0] = 0;
+
+  // pattern 3 all blue
+  assign r_pattern[0] = 0;
+  assign g_pattern[0] = 0;
+  assign b_pattern[0] = (col_counter < ACTIVE_COLS && row_counter < ACTIVE_ROWS) ? {VIDEO_WIDTH{1'b1}} : 0;
 
 endmodule
