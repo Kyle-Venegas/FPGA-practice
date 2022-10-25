@@ -44,18 +44,23 @@ wire [2:0] bar_select;
   assign b_pattern[0] = 0;
 
   // pattern 1 all red
-  assign r_pattern[0] = (col_counter < ACTIVE_COLS && row_counter < ACTIVE_ROWS) ? {VIDEO_WIDTH{1'b1}} : 0;
-  assign g_pattern[0] = 0;
-  assign b_pattern[0] = 0;
+  assign r_pattern[1] = (col_counter < ACTIVE_COLS && row_counter < ACTIVE_ROWS) ? {VIDEO_WIDTH{1'b1}} : 0;
+  assign g_pattern[1] = 0;
+  assign b_pattern[1] = 0;
 
   // pattern 2 all green
-  assign r_pattern[0] = 0;
-  assign g_pattern[0] = (col_counter < ACTIVE_COLS && row_counter < ACTIVE_ROWS) ? {VIDEO_WIDTH{1'b1}} : 0;
-  assign b_pattern[0] = 0;
+  assign r_pattern[2] = 0;
+  assign g_pattern[2] = (col_counter < ACTIVE_COLS && row_counter < ACTIVE_ROWS) ? {VIDEO_WIDTH{1'b1}} : 0;
+  assign b_pattern[2] = 0;
 
   // pattern 3 all blue
-  assign r_pattern[0] = 0;
-  assign g_pattern[0] = 0;
-  assign b_pattern[0] = (col_counter < ACTIVE_COLS && row_counter < ACTIVE_ROWS) ? {VIDEO_WIDTH{1'b1}} : 0;
+  assign r_pattern[3] = 0;
+  assign g_pattern[3] = 0;
+  assign b_pattern[3] = (col_counter < ACTIVE_COLS && row_counter < ACTIVE_ROWS) ? {VIDEO_WIDTH{1'b1}} : 0;
+
+  //pattern 4 checkerboard
+  assign r_pattern[4] = col_counter[5] ^ row_counter[5] ? {VIDEO_WIDTH{1'b1}} : 0;
+  assign g_pattern[4] = r_pattern[4];
+  assign b_pattern[4] = r_pattern[4];
 
 endmodule
