@@ -63,4 +63,38 @@ wire [2:0] bar_select;
   assign g_pattern[4] = r_pattern[4];
   assign b_pattern[4] = r_pattern[4];
 
+  // pattern 5 color bars
+  // truth table:
+  // R G B bar_select output color
+  // 0 0 0     0      black
+  // 0 0 1     1      blue
+  // 0 1 0     2      green
+  // 0 1 1     3      turquoise
+  // 1 0 0     4      red
+  // 1 0 1     5      purple
+  // 1 1 0     6      yellow
+  // 1 1 1     7      white
+  assign bar_width = ACTIVE_COLS/8;
+
+  assign bar_select = col_counter < bar_width*1 ? 0 :
+                      col_counter < bar_width*2 ? 1 :
+                      col_counter < bar_width*3 ? 2 :
+                      col_counter < bar_width*4 ? 3 :
+                      col_counter < bar_width*5 ? 4 :
+                      col_counter < bar_width*6 ? 5 :
+                      col_counter < bar_width*7 ? 6 : 7;
+
+// implement truth table above w/ conditional assigns
+assign r_pattern[5] = (bar_select == 4 || bar_select == 5 || bar_select == 6 || bar_select == 7) 
+                      ? {VIDEO_WIDTH{1'b1}} : 0;
+
+assign g_pattern[5] = (bar_select == 2 || bar_select == 3 || bar_select == 6 || bar_select == 7) 
+                      ? {VIDEO_WIDTH{1'b1}} : 0;
+
+assign b_pattern[5] = (bar_select == 1 || bar_select == 3 || bar_select == 5 || bar_select == 7) 
+                      ? {VIDEO_WIDTH{1'b1}} : 0;
+
+
+
+
 endmodule
