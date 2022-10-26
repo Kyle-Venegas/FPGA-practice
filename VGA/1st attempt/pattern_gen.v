@@ -98,6 +98,8 @@ assign b_pattern[5] = (bar_select == 1 || bar_select == 3 || bar_select == 5 || 
 assign r_pattern[6] = (row_counter <= 1 || row_counter >= ACTIVE_ROWS-1-1 ||
                        col_counter <= 1 || col_counter >= ACTIVE_COLS-1-1) ?
                       {VIDEO_WIDTH{1'b1}} : 0;
+assign g_pattern[6] = r_pattern[6];
+assign b_pattern[6] = r_pattern[6];
 
 
 endmodule
