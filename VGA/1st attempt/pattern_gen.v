@@ -101,5 +101,59 @@ assign r_pattern[6] = (row_counter <= 1 || row_counter >= ACTIVE_ROWS-1-1 ||
 assign g_pattern[6] = r_pattern[6];
 assign b_pattern[6] = r_pattern[6];
 
+// test pattern selection
+always @(posedge clk ) begin
+  case (i_pattern) // byte from UART
+
+    4'h0: begin
+      o_r_val <= r_pattern[0];
+      o_g_val <= g_pattern[0];
+      o_b_val <= b_pattern[0];
+    end
+    4'h1: begin
+      o_r_val <= r_pattern[1];
+      o_g_val <= g_pattern[1];
+      o_b_val <= b_pattern[1];
+    end
+    4'h2: begin
+      o_r_val <= r_pattern[2];
+      o_g_val <= g_pattern[2];
+      o_b_val <= b_pattern[2];
+    end
+    4'h3: begin
+      o_r_val <= r_pattern[3];
+      o_g_val <= g_pattern[3];
+      o_b_val <= b_pattern[3];
+    end
+    4'h4: begin
+      o_r_val <= r_pattern[4];
+      o_g_val <= g_pattern[4];
+      o_b_val <= b_pattern[4];
+    end
+    4'h5: begin
+      o_r_val <= r_pattern[5];
+      o_g_val <= g_pattern[5];
+      o_b_val <= b_pattern[5];
+    end
+    4'h6: begin
+      o_r_val <= r_pattern[6];
+      o_g_val <= g_pattern[6];
+      o_b_val <= b_pattern[6];
+    end
+    4'h7: begin
+      o_r_val <= r_pattern[7];
+      o_g_val <= g_pattern[7];
+      o_b_val <= b_pattern[7];
+    end
+    
+    default: begin
+      o_r_val <= r_pattern[0];
+      o_g_val <= g_pattern[0];
+      o_b_val <= b_pattern[0];
+    end
+  endcase
+  
+end
+
 
 endmodule
