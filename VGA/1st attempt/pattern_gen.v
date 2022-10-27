@@ -1,4 +1,6 @@
-`include "sync_count.v"
+
+
+`include "sync_count.v" // for EDAplayground
 
 module pattern_gen #(
   parameter VIDEO_WIDTH = 3,

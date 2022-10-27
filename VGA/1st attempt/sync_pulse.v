@@ -1,3 +1,4 @@
+// sync pulse module for 640x480
 module sync_pulse #(
   parameter TOTAL_COLS  = 800,
   parameter TOTAL_ROWS  = 525,
@@ -25,6 +26,7 @@ module sync_pulse #(
     end
   end
   
+  // assign syncs bit 1 when in ACTIVE range
   assign o_hsync = o_col_counter < ACTIVE_COLS ? 1'b1 : 1'b0;
   assign o_vsync = o_row_counter < ACTIVE_ROWS ? 1'b1 : 1'b0;
 
