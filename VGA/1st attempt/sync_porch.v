@@ -58,8 +58,32 @@ module sync_porch #(
     .o_row_counter(row_counter)
   );
 
+  // mods hsync and vsync to include front and back porch
+  always @(posedge clk ) begin
+    if ((col_counter < FRONT_PORCH_HORZ + ACTIVE_COLS) || 
+      (col_counter > TOTAL_COLS - BACK_PORCH_HORZ-1)) begin
+      o_hsync <= 1'b1;
+    end else begin
+      o_hsync < hsync;
+    end
+    
+    if ((row_counter < FRONT_PORCH_VERT + ACTIVE_ROWS) ||
+      (row_counter > TOTAL_ROWS - BACK_PORCH_VERT-1)) begin
+      o_vsync <= 1'b1;     
+      end else begin
+        o_vsync <= vsync;
+      end
+  end
 
+  // align input vid to modded sync pulses
+  // 2 clk cycles of delay
+  always @(posedge clk ) begin
+    r_val <= i_r_val;
+    g_val <= i_g_val;
+    b_val <= i_b_val;
 
-
-
+    o_r_val <= r_val;
+    o_g_val <= g_val;
+    o_b_val <= b_val;
+  end
 endmodule
