@@ -1,0 +1,1 @@
+// modifies hsync and vsync to include front and back porch.
