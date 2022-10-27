@@ -15,5 +15,29 @@ module sync_to_count #(
 
   // register syncs to align
   always @(posedge clk ) begin
-    
+    o_vsync <= i_vsync;
+    o_hsync <= i_hsync;
   end
+
+  // track row/col counters
+  always @(posedge clk ) begin
+    if (frame_start == 1'b1) begin
+      o_col_counter <= 0;
+      o_row_counter <= 0;
+    end else begin
+      if (o_col_counter == TOTAL_COLS-1) begin
+        if (o_row_counter == TOTAL_ROWS-1) begin
+          o_row_counter <= 0;
+        end else begin
+          o_row_counter <= o_row_counter + 1;
+        end
+        o_col_counter <= 0;
+      end else begin
+        o_col_counter <= o_col_counter + 1;
+      end
+    end
+  end
+  
+  // reset counters on rising edge
+  assign frame_start = (~o_vsync & i_vsync);
+endmodule

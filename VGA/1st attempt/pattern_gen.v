@@ -18,7 +18,7 @@ module pattern_gen #(
   output reg  [VIDEO_WIDTH-1:0] o_b_val,
   )
 
-wire vsync, hsync;
+  wire vsync, hsync;
 
   // patterns have 16 indexes
   wire [VIDEO_WIDTH-1:0] r_pattern[0:15];
@@ -95,7 +95,7 @@ wire vsync, hsync;
                       col_counter < bar_width*6 ? 5 :
                       col_counter < bar_width*7 ? 6 : 7;
 
-// implement truth table above w/ conditional assigns
+  // implement truth table above w/ conditional assigns
   assign r_pattern[5] = (bar_select == 4 || bar_select == 5 || bar_select == 6 || bar_select == 7) 
                         ? {VIDEO_WIDTH{1'b1}} : 0;
 
@@ -105,14 +105,14 @@ wire vsync, hsync;
   assign b_pattern[5] = (bar_select == 1 || bar_select == 3 || bar_select == 5 || bar_select == 7) 
                         ? {VIDEO_WIDTH{1'b1}} : 0;
 
-// pattern 6 black w/ white border 2px wide
+  // pattern 6 black w/ white border 2px wide
   assign r_pattern[6] = (row_counter <= 1 || row_counter >= ACTIVE_ROWS-1-1 ||
                          col_counter <= 1 || col_counter >= ACTIVE_COLS-1-1) ?
                         {VIDEO_WIDTH{1'b1}} : 0;
   assign g_pattern[6] = r_pattern[6];
   assign b_pattern[6] = r_pattern[6];
 
-// test pattern selection
+  // test pattern selection
   always @(posedge clk ) begin
     case (i_pattern) // byte from UART
 
