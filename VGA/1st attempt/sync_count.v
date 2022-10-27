@@ -1,7 +1,7 @@
 // Creates row and col counters to output sync pulses from hsync and vsync pulses.
 module sync_to_count #(
-  parameter TOTAL_COLS = 800,
-  parameter TOTAL_ROWS = 525
+  parameter        TOTAL_COLS = 800,
+  parameter        TOTAL_ROWS = 525
   ) (
   input            clk,
   input            i_hsync,
