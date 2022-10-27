@@ -32,6 +32,10 @@ module sync_porch #(
   parameter FRONT_PORCH_VERT = 10;
   parameter BACK_PORCH_VERT  = 33;
 
+  // wire hsync vsync
+  wire hsync;
+  wire vsync;
+
   // counters
   wire [VIDEO_WIDTH-1:0] col_counter;
   wire [VIDEO_WIDTH-1:0] row_counter;
@@ -41,9 +45,18 @@ module sync_porch #(
   reg [VIDEO_WIDTH-1:0] g_val = 0;
   reg [VIDEO_WIDTH-1:0] b_val = 0;
 
-  
-
-
+  sync_to_count #(
+    .TOTAL_COLS(TOTAL_COLS),
+    .TOTAL_ROWS(TOTAL_ROWS),
+    ) UUT (  
+    .clk(clk),
+    .i_hsync(i_hsync),
+    .i_vsync(i_vsync),
+    .o_hsync(hsync),
+    .o_vsync(vsync),
+    .o_col_counter(col_counter),
+    .o_row_counter(row_counter)
+  );
 
 
 
