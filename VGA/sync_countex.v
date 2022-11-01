@@ -17,7 +17,7 @@ module Sync_To_Count #(
   output reg [9:0] o_Row_Count = 0
   );
    
-   wire w_Frame_Start;
+  wire w_Frame_Start; // 
    
   // Register syncs to align with output data.
   always @(posedge i_Clk) begin
@@ -27,7 +27,7 @@ module Sync_To_Count #(
 
   // Keep track of Row/Column counters.
   always @(posedge i_Clk) begin
-    if (w_Frame_Start == 1'b1) begin
+    if (w_Frame_Start == 1'b1) begin // trigger by vsync rising edge
       o_Col_Count <= 0;
       o_Row_Count <= 0;
     end else begin
