@@ -62,19 +62,19 @@ module VGA_Test_Patterns_Top
    
   // 25,000,000 / 115,200 = 217
   UART_RX #(.CLKS_PER_BIT(217)) UART_RX_Inst (
-    .i_Clock    (i_clk),
-    .i_RX_Serial(i_UART_RX),
-    .o_RX_DV    (w_RX_DV),
-    .o_RX_Byte  (w_RX_Byte)
+    .clk          (i_clk),
+    .serial_stream(i_UART_RX),
+    .rx_byte      (w_RX_Byte),
+    .data_valid   (w_RX_DV)
   );
     
   UART_TX #(.CLKS_PER_BIT(217)) UART_TX_Inst (
-    .i_Clock    (i_clk),
-   .i_TX_DV     (w_RX_DV),      // Pass RX to TX module for loopback
-   .i_TX_Byte   (w_RX_Byte),    // Pass RX to TX module for loopback
-   .o_TX_Active (w_TX_Active),
-   .o_TX_Serial (w_TX_Serial),
-   .o_TX_Done   ()
+    .clk      (i_clk),
+    .rx_dv    (w_RX_DV),      // Pass RX to TX module for loopback
+    .rx_byte  (w_RX_Byte),    // Pass RX to TX module for loopback
+    .tx_serial(w_TX_Serial),
+    .tx_active(w_TX_Active),
+    .tx_done  ()
   );
    
   // Drive UART line high when transmitter is not active
@@ -83,7 +83,7 @@ module VGA_Test_Patterns_Top
    
   // Binary to 7-Segment Converter for Upper Digit
   Binary_To_7Segment SevenSeg1_Inst (
-    .i_Clk        (i_clk),
+    .i_clk        (i_clk),
     .i_Binary_Num (w_RX_Byte[7:4]),
     .o_Segment_A  (w_Segment1_A),
     .o_Segment_B  (w_Segment1_B),
@@ -105,7 +105,7 @@ module VGA_Test_Patterns_Top
    
   // Binary to 7-Segment Converter for Lower Digit
   Binary_To_7Segment SevenSeg2_Inst (
-    .i_Clk        (i_clk),
+    .i_clk        (i_clk),
     .i_Binary_Num (w_RX_Byte[3:0]),
     .o_Segment_A  (w_Segment2_A),
     .o_Segment_B  (w_Segment2_B),

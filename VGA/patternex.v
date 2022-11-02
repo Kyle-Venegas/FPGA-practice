@@ -18,7 +18,7 @@
 // Pattern 6: White Box with Border (2 pixels)
 
 // Note: Comment out this line when building in iCEcube2:
-`include "Sync_To_Count.v"
+//`include "Sync_To_Count.v"
 
 
 module Test_Pattern_Gen #(
