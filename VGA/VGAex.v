@@ -1,5 +1,11 @@
 // This module is designed for 640x480 with a 25 MHz input clock.
+// Using a 25 MHz clock, how do you get a 60Hz framerate?
 // sets active frame from total area. Sync pulses are 1 when active
+
+// timing H:
+// tot: 800
+// active: 640
+// 800 - 640 = 160px
 
 module VGA_Sync_Pulses #(
   parameter TOTAL_COLS  = 800,
