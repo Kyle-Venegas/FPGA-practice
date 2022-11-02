@@ -7,7 +7,7 @@ module pattern_gen #(
   parameter TOTAL_COLS  = 800,
   parameter TOTAL_ROWS  = 525,
   parameter ACTIVE_COLS = 640,
-  parameter ACTIVE_ROWS = 480,
+  parameter ACTIVE_ROWS = 480
   ) (
   input       clk,
   input       i_hsync,
@@ -17,8 +17,8 @@ module pattern_gen #(
   output reg  o_vsync,
   output reg  [VIDEO_WIDTH-1:0] o_r_val,
   output reg  [VIDEO_WIDTH-1:0] o_g_val,
-  output reg  [VIDEO_WIDTH-1:0] o_b_val,
-  )
+  output reg  [VIDEO_WIDTH-1:0] o_b_val
+  );
 
   wire vsync, hsync;
 
@@ -33,15 +33,15 @@ module pattern_gen #(
   wire [6:0] bar_width;
   wire [2:0] bar_select;
 
-  sync_count #(
+  sync_to_count #(
     .TOTAL_COLS(TOTAL_COLS),
     .TOTAL_ROWS(TOTAL_ROWS)
     ) UUT (
-    .clk(clk),
-    .i_hsync,
-    .i_vsync,
-    .o_hsync,
-    .o_vsync,
+    .clk    (clk),
+    .i_hsync(i_hsync),
+    .i_vsync(i_vsync),
+    .o_hsync(hsync),
+    .o_vsync(vsync),
     .o_col_counter(col_counter),
     .o_row_counter(row_counter)
   );

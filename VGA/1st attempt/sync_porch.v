@@ -19,9 +19,9 @@ module sync_porch #(
   input      [VIDEO_WIDTH-1:0] i_r_val,
   input      [VIDEO_WIDTH-1:0] i_g_val,
   input      [VIDEO_WIDTH-1:0] i_b_val,
-  output     [VIDEO_WIDTH-1:0] o_r_val,
-  output     [VIDEO_WIDTH-1:0] o_g_val,
-  output     [VIDEO_WIDTH-1:0] o_b_val,
+  output reg [VIDEO_WIDTH-1:0] o_r_val,
+  output reg [VIDEO_WIDTH-1:0] o_g_val,
+  output reg [VIDEO_WIDTH-1:0] o_b_val,
   output reg                   o_hsync,
   output reg                   o_vsync
   );
@@ -47,7 +47,7 @@ module sync_porch #(
 
   sync_to_count #(
     .TOTAL_COLS(TOTAL_COLS),
-    .TOTAL_ROWS(TOTAL_ROWS),
+    .TOTAL_ROWS(TOTAL_ROWS)
     ) UUT (  
     .clk(clk),
     .i_hsync(i_hsync),
@@ -64,7 +64,7 @@ module sync_porch #(
       (col_counter > TOTAL_COLS - BACK_PORCH_HORZ-1)) begin
       o_hsync <= 1'b1;
     end else begin
-      o_hsync < hsync;
+      o_hsync <= hsync;
     end
     
     if ((row_counter < FRONT_PORCH_VERT + ACTIVE_ROWS) ||

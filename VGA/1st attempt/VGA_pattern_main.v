@@ -51,7 +51,7 @@ module VGA_testpatterns_main (
   // VGA constants
   parameter VIDEO_WIDTH = 3;
   parameter TOTAL_COLS  = 800;
-  parameter VIDEO_ROWS  = 525;
+  parameter TOTAL_ROWS  = 525;
   parameter ACTIVE_COLS = 640;
   parameter ACTIVE_ROWS = 480;
 
@@ -131,7 +131,7 @@ module VGA_testpatterns_main (
     .TOTAL_COLS(TOTAL_COLS),
     .TOTAL_ROWS(TOTAL_ROWS),
     .ACTIVE_COLS(ACTIVE_COLS),
-    .ACTIVE_ROWS(ACTIVE_ROWS),
+    .ACTIVE_ROWS(ACTIVE_ROWS)
   ) sync_pulse_inst (
     .clk(i_clk),
     .o_hsync(w_HSync_Start),
@@ -155,7 +155,7 @@ module VGA_testpatterns_main (
     .o_vsync  (w_VSync_TP),
     .o_r_val  (w_Red_Video_TP),
     .o_g_val  (w_Grn_Video_TP),
-    .o_b_val  (w_Blu_Video_TP),
+    .o_b_val  (w_Blu_Video_TP)
   );
 
   sync_porch #(
@@ -174,8 +174,8 @@ module VGA_testpatterns_main (
     .o_r_val(w_Red_Video_Porch),
     .o_g_val(w_Grn_Video_Porch),
     .o_b_val(w_Blu_Video_Porch),
-    .o_hsync(w_Hsync_Porch),
-    .o_vsync(w_Vsync_Porch)
+    .o_hsync(w_HSync_Porch),
+    .o_vsync(w_VSync_Porch)
   );
 
   assign o_VGA_HSync = w_HSync_Porch;

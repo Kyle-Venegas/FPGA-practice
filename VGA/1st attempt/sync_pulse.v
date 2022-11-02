@@ -3,7 +3,7 @@ module sync_pulse #(
   parameter TOTAL_COLS  = 800,
   parameter TOTAL_ROWS  = 525,
   parameter ACTIVE_COLS = 640,
-  parameter ACTIVE_ROWS = 480,
+  parameter ACTIVE_ROWS = 480
   ) (
   input            clk,
   output           o_hsync,
