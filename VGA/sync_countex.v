@@ -33,7 +33,7 @@ module Sync_To_Count #(
     end else begin
       if (o_Col_Count == TOTAL_COLS-1) begin
         if (o_Row_Count == TOTAL_ROWS-1) begin
-          o_Row_Count <= 0;
+          o_Row_Count <= 0;   // reset once end is reached
         end else begin
           o_Row_Count <= o_Row_Count + 1;
         end

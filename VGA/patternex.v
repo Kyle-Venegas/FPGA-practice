@@ -6,6 +6,8 @@
 // which test pattern gets displayed is done via the i_Pattern signal, which is
 // an input to a case statement.
 
+//
+
 // Available Patterns:
 // Pattern 0: Disables the Test Pattern Generator
 // Pattern 1: All Red
@@ -41,7 +43,7 @@ module Test_Pattern_Gen #(
   // Patterns have 16 indexes (0 to 15) and can be g_Video_Width bits wide
   // 3 bits, max 7
   // where RGB values are worked on before outputs
-  wire [VIDEO_WIDTH-1:0] Pattern_Red[0:15];
+  wire [VIDEO_WIDTH-1:0] Pattern_Red[0:15]; // is an array, 0 to 15 is the depth of the array
   wire [VIDEO_WIDTH-1:0] Pattern_Grn[0:15];
   wire [VIDEO_WIDTH-1:0] Pattern_Blu[0:15];
 
@@ -155,6 +157,7 @@ module Test_Pattern_Gen #(
   /////////////////////////////////////////////////////////////////////////////
   // Select between different test patterns
   /////////////////////////////////////////////////////////////////////////////
+  // continuously assigned to pattern, but pattern only goes to the output based on input.
   always @(posedge i_Clk)
   begin
     case (i_Pattern)
