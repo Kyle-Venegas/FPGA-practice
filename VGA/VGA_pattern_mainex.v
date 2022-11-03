@@ -80,7 +80,6 @@ module VGA_Test_Patterns_Top
   // Drive UART line high when transmitter is not active
   assign o_UART_TX = w_TX_Active ? w_TX_Serial : 1'b1; 
    
-   
   // Binary to 7-Segment Converter for Upper Digit
   Binary_To_7Segment SevenSeg1_Inst (
     .i_clk        (i_clk),
