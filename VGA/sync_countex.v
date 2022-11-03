@@ -45,6 +45,10 @@ module Sync_To_Count #(
   end
     
   // Look for rising edge on Vertical Sync to reset the counters
+  // case statements should always be put in an always or initial block
+  // Don't use data inputs as clocks, frowned upon
+  // ie. always @(posedge i_vsync) begin...
+  // https://stackoverflow.com/questions/8413661/proper-way-for-signal-edge-detection-in-verilog
   assign w_Frame_Start = (~o_VSync & i_VSync);
 
 endmodule
