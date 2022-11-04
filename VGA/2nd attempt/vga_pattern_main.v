@@ -49,19 +49,6 @@ module VGA_testpatterns_main (
   wire tx_serial;
   wire tx_active;
 
-  // VGA constants
-  parameter VIDEO_WIDTH = 3;
-  parameter TOTAL_COLS  = 800;
-  parameter TOTAL_ROWS  = 525;
-  parameter ACTIVE_COLS = 640;
-  parameter ACTIVE_ROWS = 480;
-
-  reg [3:0] tp_index = 0;
-
-  // VGA signals
-  wire [VIDEO_WIDTH-1:0] w_Red_Video_TP, w_Red_Video_Porch;
-  wire [VIDEO_WIDTH-1:0] w_Grn_Video_TP, w_Grn_Video_Porch;
-  wire [VIDEO_WIDTH-1:0] w_Blu_Video_TP, w_Blu_Video_Porch;
 
   UART_RX #(.CLKS_PER_BIT(217)) UART_RX_INST (
     .clk(i_clk),
@@ -121,42 +108,54 @@ module VGA_testpatterns_main (
   assign o_Segment2_F = ~w_Segment2_F;
   assign o_Segment2_G = ~w_Segment2_G;
 
-  // VGA test patterns
+  // VGA constants
+  parameter VIDEO_WIDTH = 3;
+  parameter TOTAL_COLS  = 800;
+  parameter TOTAL_ROWS  = 525;
+  parameter ACTIVE_COLS = 640;
+  parameter ACTIVE_ROWS = 480;
+
+  reg [3:0] tp_index = 0;
+
+  // VGA signals
+  wire [VIDEO_WIDTH-1:0] w_r_val, w_r_porch;
+  wire [VIDEO_WIDTH-1:0] w_g_val, w_g_porch;
+  wire [VIDEO_WIDTH-1:0] w_b_val, w_b_porch;
+
   always @(posedge i_clk ) begin
-    if (rx_data_valid == 1'b1) begin
+    if (rx_data_valid == 1'b1)
       tp_index <= rx_byte[3:0];
-    end
   end
 
   sync_pulse #(
-    .TOTAL_COLS(TOTAL_COLS),
-    .TOTAL_ROWS(TOTAL_ROWS),
+    .TOTAL_COLS (TOTAL_COLS) ,
+    .TOTAL_ROWS (TOTAL_ROWS) ,
     .ACTIVE_COLS(ACTIVE_COLS),
-    .ACTIVE_ROWS(ACTIVE_ROWS)
-  ) sync_pulse_inst (
-    .clk(i_clk),
-    .o_hsync(w_HSync_Start),
-    .o_vsync(w_VSync_Start),
-    .o_col_counter(),
-    .o_row_counter()
+    .ACTIVE_ROWS(ACTIVE_ROWS)) 
+  sync_pulse_inst (
+    .clk            (i_clk),
+    .o_hsync        (w_hsync_start)
+    .o_vsync        (w_vsync_start)
+    .o_col_counter  (),
+    .o_row_counter  ()
   );
 
-  pattern_gen #(
+  test_pattern #(
     .VIDEO_WIDTH(VIDEO_WIDTH),
     .TOTAL_COLS (TOTAL_COLS),
     .TOTAL_ROWS (TOTAL_ROWS),
     .ACTIVE_COLS(ACTIVE_COLS),
-    .ACTIVE_ROWS(ACTIVE_ROWS)
-  ) pattern_gen_inst (
+    .ACTIVE_ROWS(ACTIVE_ROWS)) 
+  test_pattern_inst (
     .clk      (i_clk),
-    .i_hsync  (w_HSync_Start),
-    .i_vsync  (w_VSync_Start),
-    .i_pattern(tp_index),
-    .o_hsync  (w_HSync_TP),
-    .o_vsync  (w_VSync_TP),
-    .o_r_val  (w_Red_Video_TP),
-    .o_g_val  (w_Grn_Video_TP),
-    .o_b_val  (w_Blu_Video_TP)
+    .i_hsync  (w_hsync_start),
+    .i_vsync  (w_vsync_start),
+    .i_pattern(tp_index),// from UART
+    .o_hsync  (w_hsync_tp),
+    .o_vsync  (w_vsync_tp),
+    .o_r_val  (w_r_val),
+    .o_g_val  (w_g_val),
+    .o_b_val  (w_b_val)
   );
 
   sync_porch #(
@@ -164,34 +163,34 @@ module VGA_testpatterns_main (
     .TOTAL_COLS (TOTAL_COLS),
     .TOTAL_ROWS (TOTAL_ROWS),
     .ACTIVE_COLS(ACTIVE_COLS),
-    .ACTIVE_ROWS(ACTIVE_ROWS)
-  ) sync_porch_inst (
+    .ACTIVE_ROWS(ACTIVE_ROWS))
+  sync_porch_inst (
     .clk    (i_clk),
-    .i_hsync(w_HSync_TP),
-    .i_vsync(w_VSync_TP),
-    .i_r_val(w_Red_Video_TP),
-    .i_g_val(w_Grn_Video_TP),
-    .i_b_val(w_Blu_Video_TP),
-    .o_r_val(w_Red_Video_Porch),
-    .o_g_val(w_Grn_Video_Porch),
-    .o_b_val(w_Blu_Video_Porch),
-    .o_hsync(w_HSync_Porch),
-    .o_vsync(w_VSync_Porch)
+    .i_hsync(w_hsync_tp),
+    .i_vsync(w_vsync_tp),
+    .i_r_val(w_r_val),
+    .i_g_val(w_r_val),
+    .i_b_val(w_b_val),
+    .o_hsync(w_hsync_porch),
+    .o_vsync(w_vsync_porch),
+    .o_r_val(w_r_porch),
+    .o_g_val(w_g_porch),
+    .o_b_val(w_b_porch)
   );
 
-  assign o_VGA_HSync = w_HSync_Porch;
-  assign o_VGA_VSync = w_VSync_Porch;
+  assign o_VGA_HSync = w_hsync_porch;
+  assign o_VGA_VSync = w_vsync_porch;
 
-  assign o_VGA_Red_0 = w_Red_Video_Porch[0];
-  assign o_VGA_Red_1 = w_Red_Video_Porch[1];
-  assign o_VGA_Red_2 = w_Red_Video_Porch[2];
-   
-  assign o_VGA_Grn_0 = w_Grn_Video_Porch[0];
-  assign o_VGA_Grn_1 = w_Grn_Video_Porch[1];
-  assign o_VGA_Grn_2 = w_Grn_Video_Porch[2];
- 
-  assign o_VGA_Blu_0 = w_Blu_Video_Porch[0];
-  assign o_VGA_Blu_1 = w_Blu_Video_Porch[1];
-  assign o_VGA_Blu_2 = w_Blu_Video_Porch[2];
+  assign o_VGA_Red_0 = w_r_porch[0];
+  assign o_VGA_Red_1 = w_r_porch[1];
+  assign o_VGA_Red_2 = w_r_porch[2];
+
+  assign o_VGA_Grn_0 = w_g_porch[0];
+  assign o_VGA_Grn_1 = w_g_porch[1];
+  assign o_VGA_Grn_2 = w_g_porch[2];
+
+  assign o_VGA_Blu_0 = w_b_porch[0];
+  assign o_VGA_Blu_1 = w_b_porch[1];
+  assign o_VGA_Blu_2 = w_b_porch[2];
 
 endmodule
