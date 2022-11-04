@@ -19,20 +19,22 @@ module sync_counter #(
     o_hsync <= i_hsync;
   end
 
+  // detect rising edge of vsync (proper way)
   wire vsync_rising_edge;
+  assign vsync_rising_edge <= (!o_vsync & i_vsync);
 
   always @(posedge clk ) begin
-    if (i_vsync == 1'b1) begin // reset when posedge of vsync detected
+    if (vsync_rising_edge) begin // reset when posedge of vsync detected
       o_col_counter <= 0;
       o_row_counter <= 0;
     end else begin
       if (o_col_counter < TOTAL_COLS-1) begin
-        o_col_counter <= o_col_counter + 1;
         if (o_row_counter < TOTAL_ROWS-1) begin
           o_row_counter <= o_row_counter + 1;
         end else begin
           o_row_counter <= 0;
         end
+        o_col_counter <= o_col_counter + 1;
       end else begin
         o_col_counter <= 0;
       end
