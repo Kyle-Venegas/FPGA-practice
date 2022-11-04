@@ -17,7 +17,7 @@ module test_pattern #(
   output reg [VIDEO_WIDTH-1:0] o_b_val
   );
 
-  // 5 patterns to select from
+  // patterns: 16 indexes, VIDEO_WIDTH bits wide.
   wire [VIDEO_WIDTH-1:0] r_pattern[0:15];
   wire [VIDEO_WIDTH-1:0] g_pattern[0:15];
   wire [VIDEO_WIDTH-1:0] b_pattern[0:15];
@@ -33,18 +33,72 @@ module test_pattern #(
   assign b_pattern[0] = 0;
 
   // pattern 1: all red;
-  assign r_pattern[1] = 
-  assign g_pattern[1] = 
-  assign b_pattern[1] = 
+  assign r_pattern[1] = (w_Col_Count < ACTIVE_COLS && w_Row_Count < ACTIVE_ROWS) ? {VIDEO_WIDTH{1'b1}} : 0;
+  assign g_pattern[1] = 0;
+  assign b_pattern[1] = 0;
   
   // pattern 2: all green;
-  assign r_pattern[2] = 
-  assign g_pattern[2] = 
-  assign b_pattern[2] = 
+  assign r_pattern[2] = 0;
+  assign g_pattern[2] = (w_Col_Count < ACTIVE_COLS && w_Row_Count < ACTIVE_ROWS) ? {VIDEO_WIDTH{1'b1}} : 0;
+  assign b_pattern[2] = 0;
   
   // pattern 3: all blue;
-  assign r_pattern[3] = 
-  assign g_pattern[3] = 
-  assign b_pattern[3] = 
-  
+  assign r_pattern[3] = 0;
+  assign g_pattern[3] = 0;
+  assign b_pattern[3] = (w_Col_Count < ACTIVE_COLS && w_Row_Count < ACTIVE_ROWS) ? {VIDEO_WIDTH{1'b1}} : 0;
+
+  // pattern 4: checkerboard;
+  // "^" is bitwise XOR
+  assign r_pattern[4] = w_Col_Count[5] ^ w_Row_Count[5] ? {VIDEO_WIDTH{1'b1}} : 0;
+  assign g_pattern[4] = r_pattern[4];
+  assign b_pattern[4] = r_pattern[4];
+
+  always @(posedge clk ) begin
+
+    case (i_pattern) 
+      4'h0 : begin
+        o_r_val <= r_pattern[0];
+        o_g_val <= g_pattern[0];
+        o_b_val <= b_pattern[0];
+      end
+
+      4'h1 : begin
+        o_r_val <= r_pattern[1];
+        o_g_val <= g_pattern[1];
+        o_b_val <= b_pattern[1];
+      end
+
+      4'h2 : begin
+        o_r_val <= r_pattern[2];
+        o_g_val <= g_pattern[2];
+        o_b_val <= b_pattern[2];
+      end
+
+      4'h3 : begin
+        o_r_val <= r_pattern[3];
+        o_g_val <= g_pattern[3];
+        o_b_val <= b_pattern[3];
+      end
+
+      4'h4 : begin
+        o_r_val <= r_pattern[4];
+        o_g_val <= g_pattern[4];
+        o_b_val <= b_pattern[4];
+      end
+
+      4'h5 : begin
+        pass;
+      end
+
+      4'h6 : begin
+        pass;
+      end
+
+      default: begin
+        o_r_val <= r_pattern[0];
+        o_g_val <= g_pattern[0];
+        o_b_val <= b_pattern[0];
+      end
+    endcase
+  end
 endmodule
