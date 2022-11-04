@@ -134,8 +134,8 @@ module VGA_testpatterns_main (
     .ACTIVE_ROWS(ACTIVE_ROWS)) 
   sync_pulse_inst (
     .clk            (i_clk),
-    .o_hsync        (w_hsync_start)
-    .o_vsync        (w_vsync_start)
+    .o_hsync        (w_hsync_start),
+    .o_vsync        (w_vsync_start),
     .o_col_counter  (),
     .o_row_counter  ()
   );
@@ -169,7 +169,7 @@ module VGA_testpatterns_main (
     .i_hsync(w_hsync_tp),
     .i_vsync(w_vsync_tp),
     .i_r_val(w_r_val),
-    .i_g_val(w_r_val),
+    .i_g_val(w_g_val),
     .i_b_val(w_b_val),
     .o_hsync(w_hsync_porch),
     .o_vsync(w_vsync_porch),
