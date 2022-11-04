@@ -22,10 +22,23 @@ module test_pattern #(
   wire [VIDEO_WIDTH-1:0] g_pattern[0:15];
   wire [VIDEO_WIDTH-1:0] b_pattern[0:15];
 
-  // sync_to_count module
-  //
-  //
-  // register syncs to align w/ output data
+  // sync_counter wires
+  wire w_vsync, w_hsync;
+  wire [9:0] w_col_counter;
+  wire [9:0] w_row_counter;
+
+  sync_counter #(
+    .TOTAL_COLS(TOTAL_COLS),
+    .TOTAL_ROWS(TOTAL_ROWS))
+  UUT (
+    .clk          (clk),
+    .i_hsync      (i_hsync),
+    .i_vsync      (i_vsync),
+    .o_hsync      (w_hsync),
+    .o_vsync      (w_vsync),
+    .o_col_counter(w_col_counter),
+    .o_row_counter(w_row_counter)
+  );
 
   // pattern 0: disable pattern
   assign r_pattern[0] = 0;
