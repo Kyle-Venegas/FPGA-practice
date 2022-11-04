@@ -18,12 +18,12 @@ module sync_pulse #(
   
   always @(posedge clk ) begin
     if (o_col_counter < TOTAL_COLS-1) begin
-      o_col_counter <= o_col_counter + 1;
       if (o_row_counter < TOTAL_ROWS-1) begin
         o_row_counter <= o_row_counter + 1;
       end else begin
         o_row_counter <= 0;
       end
+      o_col_counter <= o_col_counter + 1;
     end else begin
       o_col_counter <= 0;
     end
