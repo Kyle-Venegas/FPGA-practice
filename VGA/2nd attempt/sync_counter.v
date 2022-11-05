@@ -21,7 +21,7 @@ module sync_counter #(
 
   // detect rising edge of vsync (proper way)
   wire vsync_rising_edge;
-  assign vsync_rising_edge = (!o_vsync & i_vsync);
+  assign vsync_rising_edge = (!o_vsync & i_vsync); // when output is 0 and inpuut is 1
 
   always @(posedge clk ) begin
     if (vsync_rising_edge) begin // reset when posedge of vsync detected
