@@ -1,13 +1,15 @@
-module Pong_Ball_Ctrl 
-  #(parameter c_GAME_WIDTH=40, 
-    parameter c_GAME_HEIGHT=30) 
-  (input            i_Clk,
-   input            i_Game_Active,
-   input [5:0]      i_Col_Count_Div,
-   input [5:0]      i_Row_Count_Div,
-   output reg       o_Draw_Ball,
-   output reg [5:0] o_Ball_X = 0,
-   output reg [5:0] o_Ball_Y = 0);
+module Pong_Ball_Ctrl #(
+  parameter c_GAME_WIDTH=40, 
+  parameter c_GAME_HEIGHT=30) 
+  (
+  input            i_Clk,
+  input            i_Game_Active,
+  input [5:0]      i_Col_Count_Div,
+  input [5:0]      i_Row_Count_Div,
+  output reg       o_Draw_Ball,
+  output reg [5:0] o_Ball_X = 0,
+  output reg [5:0] o_Ball_Y = 0
+  );
  
   // Set the Speed of the ball movement.
   // In this case, the ball will move one board game unit 
@@ -18,12 +20,10 @@ module Pong_Ball_Ctrl
   reg [5:0]  r_Ball_Y_Prev = 0;    
   reg [31:0] r_Ball_Count = 0;
  
-  always @(posedge i_Clk)
-  begin
+  always @(posedge i_Clk) begin
     // If the game is not active, ball stays in the middle of
     // screen until the game starts.
-    if (i_Game_Active == 1'b0)
-    begin
+    if (i_Game_Active == 1'b0) begin
       o_Ball_X      <= c_GAME_WIDTH/2;
       o_Ball_Y      <= c_GAME_HEIGHT/2;
       r_Ball_X_Prev <= c_GAME_WIDTH/2 + 1;
@@ -34,12 +34,10 @@ module Pong_Ball_Ctrl
     // update rate is determined by input parameter
     // If ball counter is at its limit, update the ball position
     // in both X and Y.
-    else
-    begin
+    else begin
       if (r_Ball_Count < c_BALL_SPEED)
         r_Ball_Count <= r_Ball_Count + 1;
-      else
-      begin
+      else begin
         r_Ball_Count <= 0;
  
         // Store Previous Location to keep track of movement
@@ -67,8 +65,7 @@ module Pong_Ball_Ctrl
  
  
   // Draws a ball at the location determined by X and Y indexes.
-  always @(posedge i_Clk)
-  begin
+  always @(posedge i_Clk) begin
     if (i_Col_Count_Div == o_Ball_X && i_Row_Count_Div == o_Ball_Y)
       o_Draw_Ball <= 1'b1;
     else
