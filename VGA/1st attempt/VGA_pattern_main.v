@@ -123,7 +123,7 @@ module VGA_testpatterns_main (
   // VGA test patterns
   always @(posedge i_clk ) begin
     if (rx_data_valid == 1'b1) begin
-      tp_index <= rx_byte[3:0];
+      tp_index <= rx_byte[3:0];       // same as bottom segment
     end
   end
 
@@ -134,7 +134,7 @@ module VGA_testpatterns_main (
     .ACTIVE_ROWS(ACTIVE_ROWS)
   ) sync_pulse_inst (
     .clk(i_clk),
-    .o_hsync(w_HSync_Start),
+    .o_hsync(w_HSync_Start),  // implicit declaration
     .o_vsync(w_VSync_Start),
     .o_col_counter(),
     .o_row_counter()
@@ -151,7 +151,7 @@ module VGA_testpatterns_main (
     .i_hsync  (w_HSync_Start),
     .i_vsync  (w_VSync_Start),
     .i_pattern(tp_index),
-    .o_hsync  (w_HSync_TP),
+    .o_hsync  (w_HSync_TP),     // implicit declaration
     .o_vsync  (w_VSync_TP),
     .o_r_val  (w_Red_Video_TP),
     .o_g_val  (w_Grn_Video_TP),
@@ -174,7 +174,7 @@ module VGA_testpatterns_main (
     .o_r_val(w_Red_Video_Porch),
     .o_g_val(w_Grn_Video_Porch),
     .o_b_val(w_Blu_Video_Porch),
-    .o_hsync(w_HSync_Porch),
+    .o_hsync(w_HSync_Porch),    // implicit declaration
     .o_vsync(w_VSync_Porch)
   );
 
