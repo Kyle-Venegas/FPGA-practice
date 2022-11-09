@@ -9,20 +9,22 @@ module Pong_Top #(
   input            i_VSync,
 
   // Game Start Button   
+  // from rx_dv
   input            i_Game_Start,
 
   // Player 1 and Player 2 Controls (Controls Paddles)
+  // switch inputs
   input            i_Paddle_Up_P1,
   input            i_Paddle_Dn_P1,
   input            i_Paddle_Up_P2,
   input            i_Paddle_Dn_P2,
 
   // Output Video
-  output reg       o_HSync,
-  output reg       o_VSync,
-  output [3:0] o_Red_Video,
-  output [3:0] o_Grn_Video,
-  output [3:0] o_Blu_Video
+  output reg    o_HSync,
+  output reg    o_VSync,
+  output [3:0]  o_Red_Video,
+  output [3:0]  o_Grn_Video,
+  output [3:0]  o_Blu_Video
   );
  
   // Local Constants to Determine Game Play
@@ -39,9 +41,10 @@ module Pong_Top #(
   parameter P1_WINS = 3'b010;
   parameter P2_WINS = 3'b011;
   parameter CLEANUP = 3'b100;
+  reg [2:0] r_SM_Main = IDLE; // initial state
  
-  reg [2:0] r_SM_Main = IDLE;
- 
+  // VGA wires
+  // sync wires need to be explicitly declared
   wire       w_HSync, w_VSync;
   wire [9:0] w_Col_Count, w_Row_Count;
    
@@ -97,7 +100,7 @@ module Pong_Top #(
   // Instantiation of Paddle Control + Draw for Player 2
   Pong_Paddle_Ctrl #(
     .c_PLAYER_PADDLE_X(c_PADDLE_COL_P2),
-    .c_GAME_HEIGHT(c_GAME_HEIGHT)) 
+    .c_GAME_HEIGHT    (c_GAME_HEIGHT)) 
   P2_Inst (
     .i_Clk          (i_Clk),
     .i_Col_Count_Div(w_Col_Count_Div),
@@ -124,44 +127,44 @@ module Pong_Top #(
   always @(posedge i_Clk) begin
     case (r_SM_Main)
  
-    // Stay in this state until Game Start button is hit
-    IDLE : begin
-      if (i_Game_Start == 1'b1)
-        r_SM_Main <= RUNNING;
-    end
- 
-    // Stay in this state until either player misses the ball
-    // can only occur when the Ball is at 0 to c_GAME_WIDTH-1
-    RUNNING : begin
-      // Player 1 Side
-      if (w_Ball_X == 0 && (w_Ball_Y < w_Paddle_Y_P1 || w_Ball_Y > w_Paddle_Y_P1 + c_PADDLE_HEIGHT))
-        r_SM_Main <= P2_WINS;
- 
-      // Player 2 Side
-      else if (w_Ball_X == c_GAME_WIDTH-1 && (w_Ball_Y < w_Paddle_Y_P2 || w_Ball_Y > w_Paddle_Y_P2  + c_PADDLE_HEIGHT))
-        r_SM_Main <= P1_WINS;
-    end
- 
-    P1_WINS : begin
-      if (r_P1_Score == c_SCORE_LIMIT-1)
-        r_P1_Score <= 0;
-      else begin
-        r_P1_Score <= r_P1_Score + 1;
-        r_SM_Main <= CLEANUP;
+      // Stay in this state until Game Start button is hit
+      IDLE : begin
+        if (i_Game_Start == 1'b1)
+          r_SM_Main <= RUNNING;
       end
-    end
  
-    P2_WINS : begin
-      if (r_P2_Score == c_SCORE_LIMIT-1)
-        r_P2_Score <= 0;
-      else begin
-        r_P2_Score <= r_P2_Score + 1;
-        r_SM_Main <= CLEANUP;
+      // Stay in this state until either player misses the ball
+      // can only occur when the Ball is at 0 to c_GAME_WIDTH-1
+      RUNNING : begin
+        // Player 1 Side
+        if (w_Ball_X == 0 && (w_Ball_Y < w_Paddle_Y_P1 || w_Ball_Y > w_Paddle_Y_P1 + c_PADDLE_HEIGHT))
+          r_SM_Main <= P2_WINS;
+ 
+        // Player 2 Side
+        else if (w_Ball_X == c_GAME_WIDTH-1 && (w_Ball_Y < w_Paddle_Y_P2 || w_Ball_Y > w_Paddle_Y_P2  + c_PADDLE_HEIGHT))
+          r_SM_Main <= P1_WINS;
       end
-    end
  
-    CLEANUP :
-      r_SM_Main <= IDLE;
+      P1_WINS : begin
+        if (r_P1_Score == c_SCORE_LIMIT-1)
+          r_P1_Score <= 0;
+        else begin
+          r_P1_Score <= r_P1_Score + 1;
+          r_SM_Main <= CLEANUP;
+        end
+      end
+ 
+      P2_WINS : begin
+        if (r_P2_Score == c_SCORE_LIMIT-1)
+          r_P2_Score <= 0;
+        else begin
+          r_P2_Score <= r_P2_Score + 1;
+          r_SM_Main <= CLEANUP;
+        end
+      end
+ 
+      CLEANUP :
+        r_SM_Main <= IDLE;
  
     endcase
   end
