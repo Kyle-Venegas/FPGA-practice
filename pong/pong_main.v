@@ -33,6 +33,8 @@ module Project10_Pong_Top (
   parameter c_ACTIVE_ROWS = 480;
      
   // Common VGA Signals
+  // _PONG : output after pong module, _PORCH : ouput after porch module
+  // not implicit because of multiple index
   wire [c_VIDEO_WIDTH-1:0] w_Red_Video_Pong, w_Red_Video_Porch;
   wire [c_VIDEO_WIDTH-1:0] w_Grn_Video_Pong, w_Grn_Video_Porch;
   wire [c_VIDEO_WIDTH-1:0] w_Blu_Video_Pong, w_Blu_Video_Porch;
@@ -41,8 +43,8 @@ module Project10_Pong_Top (
   UART_RX #(.CLKS_PER_BIT(217)) UART_RX_Inst (
     .i_Clock    (i_clk),
     .i_RX_Serial(i_UART_RX),
-    .o_RX_DV    (w_RX_DV),
-    .o_RX_Byte  ()
+    .o_RX_DV    (w_RX_DV),    // implicit declaration, only used to start game
+    .o_RX_Byte  ()            // no output since no loop or req the digit display
   );
     
   // Generates Sync Pulses to run VGA
@@ -53,8 +55,8 @@ module Project10_Pong_Top (
     .ACTIVE_ROWS(c_ACTIVE_ROWS)) 
   VGA_Sync_Pulses_Inst (
     .i_Clk      (i_clk),
-    .o_HSync    (w_HSync_VGA),
-    .o_VSync    (w_VSync_VGA),
+    .o_HSync    (w_HSync_VGA),  // implicit
+    .o_VSync    (w_VSync_VGA),  // implicit
     .o_Col_Count(),
     .o_Row_Count()
   );
@@ -63,25 +65,25 @@ module Project10_Pong_Top (
   Debounce_Switch Switch_1 (
     .i_Clk    (i_clk),
     .i_Switch (i_Switch_1),
-    .o_Switch (w_Switch_1)
+    .o_Switch (w_Switch_1)  // implicit
   );
    
   Debounce_Switch Switch_2 (
     .i_Clk    (i_clk),
     .i_Switch (i_Switch_2),
-    .o_Switch (w_Switch_2)
+    .o_Switch (w_Switch_2)  // implicit
   );
    
   Debounce_Switch Switch_3 (
     .i_Clk    (i_clk),
     .i_Switch (i_Switch_3),
-    .o_Switch (w_Switch_3)
+    .o_Switch (w_Switch_3)  // implicit
   );
    
   Debounce_Switch Switch_4 (
     .i_Clk    (i_clk),
     .i_Switch (i_Switch_4),
-    .o_Switch (w_Switch_4)
+    .o_Switch (w_Switch_4)  // implicit
   );
    
   Pong_Top #(
@@ -91,15 +93,15 @@ module Project10_Pong_Top (
     .c_ACTIVE_ROWS(c_ACTIVE_ROWS)) 
   Pong_Inst (
     .i_Clk          (i_clk),
-    .i_HSync        (w_HSync_VGA),
-    .i_VSync        (w_VSync_VGA),
-    .i_Game_Start   (w_RX_DV),
-    .i_Paddle_Up_P1 (w_Switch_1),
-    .i_Paddle_Dn_P1 (w_Switch_2),
-    .i_Paddle_Up_P2 (w_Switch_3),
-    .i_Paddle_Dn_P2 (w_Switch_4),
-    .o_HSync        (w_HSync_Pong),
-    .o_VSync        (w_VSync_Pong),
+    .i_HSync        (w_HSync_VGA),  // implicit
+    .i_VSync        (w_VSync_VGA),  // implicit
+    .i_Game_Start   (w_RX_DV),      // implicit
+    .i_Paddle_Up_P1 (w_Switch_1),   // implicit
+    .i_Paddle_Dn_P1 (w_Switch_2),   // implicit
+    .i_Paddle_Up_P2 (w_Switch_3),   // implicit
+    .i_Paddle_Dn_P2 (w_Switch_4),   // implicit
+    .o_HSync        (w_HSync_Pong), // implicit
+    .o_VSync        (w_VSync_Pong), // implicit
     .o_Red_Video    (w_Red_Video_Pong),
     .o_Grn_Video    (w_Grn_Video_Pong),
     .o_Blu_Video    (w_Blu_Video_Pong)
