@@ -41,10 +41,10 @@ module Project10_Pong_Top (
    
   // 25,000,000 / 115,200 = 217
   UART_RX #(.CLKS_PER_BIT(217)) UART_RX_Inst (
-    .i_Clock    (i_clk),
-    .i_RX_Serial(i_UART_RX),
-    .o_RX_DV    (w_RX_DV),    // implicit declaration, only used to start game
-    .o_RX_Byte  ()            // no output since no loop or req the digit display
+    .clk          (i_clk),
+    .serial_stream(i_UART_RX),
+    .rx_byte      (),           // no output since no loop or req the digit display
+    .data_valid   (w_RX_DV)     // implicit declaration, only used to start game
   );
     
   // Generates Sync Pulses to run VGA
