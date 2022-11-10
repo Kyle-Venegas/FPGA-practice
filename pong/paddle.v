@@ -17,7 +17,7 @@ module Pong_Paddle_Ctrl #(
   // every 50 milliseconds that the button is held down.
   parameter c_PADDLE_SPEED = 1250000;
  
-  reg [31:0] r_Paddle_Count = 0;
+  reg [31:0] r_Paddle_Count = 0;  // paddle counter
  
   wire w_Paddle_Count_En;
  

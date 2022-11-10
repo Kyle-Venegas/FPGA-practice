@@ -32,7 +32,7 @@ module Pong_Top #(
   parameter c_GAME_HEIGHT   = 30;
   parameter c_SCORE_LIMIT   = 9;
   parameter c_PADDLE_HEIGHT = 6;
-  parameter c_PADDLE_COL_P1 = 0;  // Col Index of Paddle for P1
+  parameter c_PADDLE_COL_P1 = 0;              // Col Index of Paddle for P1
   parameter c_PADDLE_COL_P2 = c_GAME_WIDTH-1; // Index for P2
  
   // State machine enumerations
@@ -58,9 +58,10 @@ module Pong_Top #(
  
   // Divided version of the Row/Col Counters
   // Allows us to make the board 40x30
+  // make board smaller???
   wire [5:0] w_Col_Count_Div, w_Row_Count_Div;
  
-  Sync_To_Count #(
+  Sync_To_Count #( // output counters
     .TOTAL_COLS(c_TOTAL_COLS),
     .TOTAL_ROWS(c_TOTAL_ROWS)) 
   Sync_To_Count_Inst (
@@ -80,6 +81,8 @@ module Pong_Top #(
   end
  
   // Drop 4 LSBs, which effectively divides by 16
+  // always better to divide by a power of 2 with FPGAs
+  // 
   assign w_Col_Count_Div = w_Col_Count[9:4];
   assign w_Row_Count_Div = w_Row_Count[9:4];
  
