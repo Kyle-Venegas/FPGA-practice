@@ -48,9 +48,15 @@ module game_main #(
   end
 
   paddle #(
-  ) 
+    .TOTAL_COLS(),
+    .TOTAL_ROWS()) 
   P1 (
-  );
+    clk           (clk)       ,
+    i_player_index(0)         ,
+    i_up          (i_switch_1),
+    i_down        (i_switch_2),
+    o_paddle_y    ()          , // output reg
+    o_draw        ()    );
 
   
 
