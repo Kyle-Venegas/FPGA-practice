@@ -1,10 +1,10 @@
 module pong_main (
-  input   i_clk,
-  input   i_Switch_1,
-  input   i_Switch_2,
-  input   i_Switch_3,
-  input   i_Switch_4,
-  input   i_UART_RX,
+  input   i_clk      ,
+  input   i_Switch_1 ,
+  input   i_Switch_2 ,
+  input   i_Switch_3 ,
+  input   i_Switch_4 ,
+  input   i_UART_RX  ,
   output  o_VGA_HSync,
   output  o_VGA_VSync,
   output  o_VGA_Red_0,
@@ -68,7 +68,6 @@ module pong_main (
     .o_row_counter());
 
   game_main #(
-    .RBG_BITS   (RBG_BITS),
     .TOTAL_COLS (TOTAL_COLS),
     .TOTAL_ROWS (TOTAL_ROWS),
     .ACTIVE_COLS(ACTIVE_COLS),
@@ -107,6 +106,9 @@ module pong_main (
     .o_g_val(w_vga_g_porch),
     .o_b_val(w_vga_b_porch));
   
+  assign o_VGA_HSync = w_hsync_porch;
+  assign o_VGA_VSync = w_vsync_porch;
+
   assign o_VGA_Red_0 = w_vga_r_porch[0];
   assign o_VGA_Red_1 = w_vga_r_porch[1];
   assign o_VGA_Red_2 = w_vga_r_porch[2];
