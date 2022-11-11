@@ -47,6 +47,11 @@ module game_main #(
     o_vsync <= w_vsync;
   end
 
+  paddle #(
+  ) 
+  P1 (
+  );
+
   
 
 
