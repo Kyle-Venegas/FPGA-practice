@@ -30,24 +30,24 @@ module pong_main (
   wire [RGB_bits-1:0] w_vga_b, w_vga_b_porch;
 
   debounce_switch switch_1 (
-    .clk(i_clk),
-    .i_switch(i_Switch_1),
-    .o_switch(w_switch_1));
+    .clk      (i_clk),
+    .i_switch (i_Switch_1),
+    .o_switch (w_switch_1));
 
   debounce_switch switch_2 (
-    .clk(i_clk),
-    .i_switch(i_Switch_2),
-    .o_switch(w_switch_2));
+    .clk      (i_clk),
+    .i_switch (i_Switch_2),
+    .o_switch (w_switch_2));
 
   debounce_switch switch_3 (
-    .clk(i_clk),
-    .i_switch(i_Switch_3),
-    .o_switch(w_switch_3));
+    .clk      (i_clk),
+    .i_switch (i_Switch_3),
+    .o_switch (w_switch_3));
 
   debounce_switch switch_4 (
-    .clk(i_clk),
-    .i_switch(i_Switch_4),
-    .o_switch(w_switch_4));
+    .clk      (i_clk),
+    .i_switch (i_Switch_4),
+    .o_switch (w_switch_4));
 
   UART_RX #(.CLKS_PER_BIT(217)) UART_RX_Inst (
     .clk,         (i_clk), 
