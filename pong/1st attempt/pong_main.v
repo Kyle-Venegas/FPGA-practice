@@ -68,6 +68,7 @@ module pong_main (
     .o_row_counter());
 
   game_main #(
+    .RBG_BITS   (RBG_BITS),
     .TOTAL_COLS (TOTAL_COLS),
     .TOTAL_ROWS (TOTAL_ROWS),
     .ACTIVE_COLS(ACTIVE_COLS),
