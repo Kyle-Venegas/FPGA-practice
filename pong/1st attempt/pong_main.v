@@ -67,6 +67,8 @@ module pong_main (
     .o_col_counter(),
     .o_row_counter());
 
+  // implicit declarations from output h/vsyncs. 
+  // only do when wires are not being modified in the main module, only outside modules
   game_main #(
     .TOTAL_COLS (TOTAL_COLS),
     .TOTAL_ROWS (TOTAL_ROWS),
@@ -83,9 +85,9 @@ module pong_main (
     .i_vsync    (w_vsync),
     .o_hsync    (w_hsync_game),
     .o_vsync    (w_vsync_game),
-    .o_vga_r    (w_vga_r),    // output reg
-    .o_vga_g    (w_vga_g),
-    .o_vga_b    (w_vga_b));
+    .o_vga_r    (w_vga_r),      // output reg
+    .o_vga_g    (w_vga_g),      // output reg
+    .o_vga_b    (w_vga_b));     // output reg
 
   sync_porch #(
     .VIDEO_WIDTH(RGB_BITS),
