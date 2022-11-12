@@ -35,6 +35,11 @@ module game_main #(
   wire [9:0] w_draw1, w_draw2;
   wire [5:0] w_col_counter_div, w_row_counter_div;
 
+  // take only 4 bits from the 10 bits. 640/16 = 40; 480/16 = 30;
+  // essentially division
+  parameter BOARD_WIDTH  = 40;
+  parameter BOARD_HEIGHT = 30;
+
   sync_counter #(
     .TOTAL_COLS(TOTAL_COLS),
     .TOTAL_ROWS(TOTAL_ROWS))
@@ -52,14 +57,14 @@ module game_main #(
     o_vsync <= w_vsync;
   end
 
-  // take only 4 bits from the 10 bits. 640/16 = 40; 480/16 = 30;
-  // essentially division
   assign w_col_counter_div = w_col_counter[9:4];
   assign w_row_counter_div = w_row_counter[9:4];
 
-  paddle P1 (
+  paddle #(
+    .PLAYER_INDEX     (0)                ,
+    .BOARD_HEIGHT     (BOARD_HEIGHT)     )
+  P1 (
     .clk              (clk)              ,
-    .i_player_index   (0)                ,
     .i_up             (i_switch_1)       ,
     .i_down           (i_switch_2)       ,
     .i_col_counter_div(w_col_counter_div),
@@ -67,9 +72,11 @@ module game_main #(
     .o_paddle_y       (w_paddle_y1)      ,   // output reg
     .o_draw           (w_draw1)          );  // output reg
 
-  paddle P2 (
+  paddle #(
+    .PLAYER_INDEX     (BOARD_WIDTH-1)    ,
+    .BOARD_HEIGHT     (BOARD_HEIGHT)     )
+  P2 (
     .clk              (clk)              ,
-    .i_player_index   (ACTIVE_COLS-1)    ,
     .i_up             (i_switch_3)       ,
     .i_down           (i_switch_4)       ,
     .i_col_counter_div(w_col_counter_div),
@@ -92,6 +99,12 @@ module game_main #(
     case (STATE)
 
       IDLE: begin
+        if (i_start == 1'b1) begin
+          STATE <= RUNNING;
+        end
+      end
+
+      RUNNING: begin
         
       end
       
