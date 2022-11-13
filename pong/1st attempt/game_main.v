@@ -105,6 +105,7 @@ module game_main #(
       end
 
       RUNNING: begin
+        // how does it detect when ball touches edge of screen?
         
       end
       
