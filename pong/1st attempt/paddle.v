@@ -16,8 +16,23 @@ module paddle #(
   // like LED blink: 
   // 1Hz  = 12500000
   // 10Hz = 1250000
-  parameter PADDLE_SPEED = 1250000;
+  // we're doing a rate of 10Hz
+  // best practice to always use 32 bit counters?
+  parameter  PADDLE_SPEED  = 1250000;
+  reg [31:0] speed_counter = 0      ;
 
+  // up / down exclusive input for paddles
+  wire w_up_down_input = i_up ^ i_down;
   
+  always @(posedge clk ) begin
+    if (w_up_down_input == 1'b1) begin
+      if (speed_counter == PADDLE_SPEED) 
+        speed_counter <= 0;
+      else
+        speed_counter <= speed_counter + 1;
+    end
+  end
+
+  // update paddle location
 
 endmodule
