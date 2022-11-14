@@ -1,3 +1,7 @@
+// in charge of the game as a whole
+// determines what scores
+// paddle and ball module is the logic
+// game_main in charge of drawing it
 module game_main #(
   parameter TOTAL_COLS  = 800,
   parameter TOTAL_ROWS  = 525,
