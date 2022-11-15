@@ -35,6 +35,7 @@ module game_main #(
   wire [9:0] w_col_counter, w_row_counter;
 
   // paddle wires, i/o
+  parameter  PADDLE_HEIGHT = 6;
   wire [9:0] w_paddle_y1, w_paddle_y2;
   wire [9:0] w_draw1, w_draw2;
   wire [5:0] w_col_counter_div, w_row_counter_div;
@@ -66,7 +67,8 @@ module game_main #(
 
   paddle #(
     .PLAYER_INDEX     (0)                ,
-    .BOARD_HEIGHT     (BOARD_HEIGHT)     )
+    .BOARD_HEIGHT     (BOARD_HEIGHT)     ,
+    .PADDLE_HEIGHT    (PADDLE_HEIGHT)    )
   P1 (
     .clk              (clk)              ,
     .i_up             (i_switch_1)       ,
@@ -78,7 +80,8 @@ module game_main #(
 
   paddle #(
     .PLAYER_INDEX     (BOARD_WIDTH-1)    ,
-    .BOARD_HEIGHT     (BOARD_HEIGHT)     )
+    .BOARD_HEIGHT     (BOARD_HEIGHT)     ,
+    .PADDLE_HEIGHT    (PADDLE_HEIGHT)    )
   P2 (
     .clk              (clk)              ,
     .i_up             (i_switch_3)       ,
