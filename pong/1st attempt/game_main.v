@@ -91,7 +91,10 @@ module game_main #(
     .o_paddle_y       (w_paddle_y2)      ,   // output reg
     .o_draw           (w_draw2)          );  // output reg
 
-  draw_ball ball (
+  draw_ball #(
+    .BOARD_WIDTH      (BOARD_WIDTH)      ,
+    .BOARD_HEIGHT     (BOARD_HEIGHT)     )
+  ball (
     .clk              (clk)              ,
     .i_paddle_y1      (w_paddle_y_1)     ,
     .i_paddle_y2      (w_paddle_y_2)     ,
