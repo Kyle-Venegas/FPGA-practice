@@ -40,6 +40,15 @@ module game_main #(
   wire [9:0] w_draw1, w_draw2;
   wire [5:0] w_col_counter_div, w_row_counter_div;
 
+  // paddle and ball speed for 10 Hz
+  // like LED blink: 
+  // 1Hz  = 12500000
+  // 10Hz = 1250000
+  // we're doing a rate of 10Hz
+  // best practice to always use 32 bit counters?
+  // counter limits speed
+  parameter GAME_SPEED = 1250000; 
+
   // take only 4 bits from the 10 bits. 640/16 = 40; 480/16 = 30;
   // essentially division
   parameter BOARD_WIDTH  = 40;
@@ -66,6 +75,7 @@ module game_main #(
   assign w_row_counter_div = w_row_counter[9:4];
 
   paddle #(
+    .PADDLE_SPEED     (GAME_SPEED)       ,
     .PLAYER_INDEX     (0)                ,
     .BOARD_HEIGHT     (BOARD_HEIGHT)     ,
     .PADDLE_HEIGHT    (PADDLE_HEIGHT)    )
@@ -79,6 +89,7 @@ module game_main #(
     .o_draw           (w_draw1)          );  // output reg
 
   paddle #(
+    .PADDLE_SPEED     (GAME_SPEED)       ,
     .PLAYER_INDEX     (BOARD_WIDTH-1)    ,
     .BOARD_HEIGHT     (BOARD_HEIGHT)     ,
     .PADDLE_HEIGHT    (PADDLE_HEIGHT)    )
@@ -92,6 +103,7 @@ module game_main #(
     .o_draw           (w_draw2)          );  // output reg
 
   draw_ball #(
+    .BALL_SPEED       (GAME_SPEED)       ,
     .BOARD_WIDTH      (BOARD_WIDTH)      ,
     .BOARD_HEIGHT     (BOARD_HEIGHT)     )
   ball (

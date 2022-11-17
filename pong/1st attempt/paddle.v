@@ -1,7 +1,8 @@
 module paddle #(
-  parameter PLAYER_INDEX    = 0  ,
-  parameter BOARD_HEIGHT    = 480,
-  parameter c_PADDLE_HEIGHT = 6  )
+  parameter PADDLE_SPEED    = 1250000,
+  parameter PLAYER_INDEX    = 0      ,
+  parameter BOARD_HEIGHT    = 480    ,
+  parameter c_PADDLE_HEIGHT = 6      )
   (
   input            clk              ,
   input            i_up             ,
@@ -12,15 +13,6 @@ module paddle #(
   output reg       o_draw           );  // output reg
   // o_paddle_y should be an array for the ball to bounce off of
 
-  // how to make paddle move while button is being pressed?
-
-  // like LED blink: 
-  // 1Hz  = 12500000
-  // 10Hz = 1250000
-  // we're doing a rate of 10Hz
-  // best practice to always use 32 bit counters?
-  // counter limits speed
-  parameter  PADDLE_SPEED  = 1250000;
   reg [31:0] r_speed_counter = 0      ;
 
   // up / down exclusive input for paddles
