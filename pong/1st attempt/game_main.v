@@ -108,6 +108,7 @@ module game_main #(
     .BOARD_HEIGHT     (BOARD_HEIGHT)     )
   ball (
     .clk              (clk)              ,
+    .i_start          (i_start)          ,
     .i_paddle_y1      (w_paddle_y_1)     ,
     .i_paddle_y2      (w_paddle_y_2)     ,
     .i_col_counter_div(w_col_counter_div),
