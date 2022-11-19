@@ -29,6 +29,7 @@ module game_main #(
   parameter P2_WINS = 3'b011;
   parameter RESET   = 3'b100;
   reg [2:0] STATE   = IDLE  ;
+  wire      w_active= 1'b0  ;
 
   // sync_counter wires
   wire       w_hsync, w_vsync;
@@ -37,8 +38,13 @@ module game_main #(
   // paddle wires, i/o
   parameter  PADDLE_HEIGHT = 6;
   wire [9:0] w_paddle_y1, w_paddle_y2;
-  wire [9:0] w_draw1, w_draw2;
+  wire [9:0] w_paddle_1, w_paddle_2;
   wire [5:0] w_col_counter_div, w_row_counter_div;
+
+  // ball wires
+  wire [5:0] w_ball_x = 0;
+  wire [5:0] w_ball_y = 0;
+  wire       w_draw_ball ;
 
   // paddle and ball speed for 10 Hz
   // like LED blink: 
@@ -47,7 +53,10 @@ module game_main #(
   // we're doing a rate of 10Hz
   // best practice to always use 32 bit counters?
   // counter limits speed
-  parameter GAME_SPEED = 1250000; 
+  parameter GAME_SPEED   = 1250000; 
+  parameter SCORE_TO_WIN = 5      ;
+  reg [3:0] r_P1_score   = 0      ;
+  reg [3:0] r_P2_score   = 0      ;
 
   // take only 4 bits from the 10 bits. 640/16 = 40; 480/16 = 30;
   // essentially division
@@ -86,7 +95,7 @@ module game_main #(
     .i_col_counter_div(w_col_counter_div),
     .i_row_counter_div(w_row_counter_div),
     .o_paddle_y       (w_paddle_y1)      ,   // output reg
-    .o_draw           (w_draw1)          );  // output reg
+    .o_draw           (w_paddle_1)       );  // output reg
 
   paddle #(
     .PADDLE_SPEED     (GAME_SPEED)       ,
@@ -100,7 +109,7 @@ module game_main #(
     .i_col_counter_div(w_col_counter_div),
     .i_row_counter_div(w_row_counter_div),
     .o_paddle_y       (w_paddle_y2)      ,   // output reg
-    .o_draw           (w_draw2)          );  // output reg
+    .o_draw           (w_paddle_2)       );  // output reg
 
   draw_ball #(
     .BALL_SPEED       (GAME_SPEED)       ,
@@ -114,22 +123,42 @@ module game_main #(
     .i_col_counter_div(w_col_counter_div),
     .i_row_counter_div(w_row_counter_div),
     .o_draw_ball      (w_draw_ball)      ,
-    .o_draw_x         (w_draw_x)         ,   // output reg
-    .o_draw_y         (w_draw_y)         );  // output reg
+    .o_ball_x         (w_ball_x)         ,   // output reg
+    .o_ball_y         (w_ball_y)         );  // output reg
 
   // state machine
   always @(posedge clk ) begin
     case (STATE)
 
       IDLE: begin
-        if (i_start == 1'b1) begin
+        if (i_start == 1'b1)
           STATE <= RUNNING;
-        end
       end
 
       RUNNING: begin
         // how does it detect when ball touches edge of screen?
-        
+        if (w_ball_x == 0 && (w_ball_y < w_paddle_y1 || w_ball_y > w_paddle_y1 + PADDLE_HEIGHT)) // bottom
+          STATE <= P2_WINS;
+        else if (w_ball_x == BOARD_WIDTH-1 && (w_ball_y < w_paddle_y2 || w_ball_y > w_paddle_y2 + PADDLE_HEIGHT)) // bottom
+          STATE <= P1_WINS;
+      end
+
+      P1_WINS: begin
+        if (r_P1_score == SCORE_TO_WIN-1)
+          r_P1_score <= 0;
+        else begin
+          r_P1_score <= r_P1_score + 1;
+          STATE <= IDLE;
+        end
+      end
+
+      P2_WINS: begin
+        if (r_P2_score == SCORE_TO_WIN-1)
+          r_P2_score <= 0;
+        else begin
+          r_P2_score <= r_P2_score + 1;
+          STATE <= IDLE;
+        end
       end
       
       default: begin
@@ -138,17 +167,12 @@ module game_main #(
     endcase
   end
 
+  assign w_active = (STATE == RUNNING) ? 1'b1 : 1'b0;
 
+  assign w_draw = w_draw_ball | w_paddle_1 | w_paddle_2;
 
-
-
-
-
-
-
-
-
-
-
+  assign o_vga_r = w_Draw_Any ? 4'b1111 : 4'b0000;
+  assign o_vga_g = w_Draw_Any ? 4'b1111 : 4'b0000;
+  assign o_vga_b = w_Draw_Any ? 4'b1111 : 4'b0000;
 
 endmodule
