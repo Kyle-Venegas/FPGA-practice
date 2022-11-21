@@ -50,7 +50,7 @@ module pong_main (
     .o_switch (w_switch_4));
 
   UART_RX #(.CLKS_PER_BIT(217)) UART_RX_Inst (
-    .clk,         (i_clk), 
+    .clk          (i_clk), 
     .serial_stream(i_UART_RX),
     .rx_byte      (),
     .data_valid   (w_data_valid));

@@ -9,7 +9,7 @@ module draw_ball #(
   input            i_paddle_y2      ,
   input [5:0]      i_col_counter_div,
   input [5:0]      i_row_counter_div,
-  output           o_draw_ball      ,
+  output reg       o_draw_ball      ,
   output reg [5:0] o_ball_x         ,   // output reg
   output reg [5:0] o_ball_y         );  // output reg
 
@@ -24,8 +24,8 @@ module draw_ball #(
     if (i_start == 1'b0) begin      // initial position: at middle
       o_ball_x <= BOARD_WIDTH/2     ;
       o_ball_y <= BOARD_HEIGHT/2    ;
-      r_prev_x =  BOARD_WIDTH/2  - 1;
-      r_prev_y =  BOARD_HEIGHT/2 - 1;
+      r_prev_x <= BOARD_WIDTH/2  - 1;
+      r_prev_y <= BOARD_HEIGHT/2 - 1;
     end else begin
       if (r_speed_counter == GAME_SPEED) begin
         r_speed_counter <= 0;
@@ -35,26 +35,24 @@ module draw_ball #(
         r_prev_y <= o_ball_y;
 
         // ball will always go diagonally
-        if (o_ball_x > r_prev_x && o_ball_x == BOARD_WIDTH || // hits wall
-            o_ball_x < r_prev_x && o_ball_x != 0)             // cont going left if not on wall
-          o_ball_x - 1; // go left
+        if (o_ball_x > r_prev_x && o_ball_x == BOARD_WIDTH || o_ball_x < r_prev_x && o_ball_x != 0) // cont going left if not on wall
+          o_ball_x <= o_ball_x - 1; // go left
         else
-          o_ball_x + 1; // go right
+          o_ball_x <= o_ball_x + 1; // go right
         
-        if (o_ball_y > r_prev_y && o_ball_y == BOARD_HEIGHT ||
-            o_ball_y < r_prev_y && o_ball_y != 0)
-          o_ball_y - 1; // go up
+        if (o_ball_y > r_prev_y && o_ball_y == BOARD_HEIGHT || o_ball_y < r_prev_y && o_ball_y != 0)
+          o_ball_y <= o_ball_y - 1; // go up
         else
-          o_ball_y + 1; // go down
+          o_ball_y <= o_ball_y + 1; // go down
       end else
         r_speed_counter <= r_speed_counter + 1;
     end
   end
 
   always @(posedge clk ) begin
-    if (i_col_counter_div == o_ball_x && i_row_counter_div == o_ball_y) begin
+    if (i_col_counter_div == o_ball_x && i_row_counter_div == o_ball_y)
       o_draw_ball <= 1'b1;
-    end else
+    else
       o_draw_ball <= 1'b0;
   end
 

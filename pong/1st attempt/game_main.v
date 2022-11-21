@@ -8,19 +8,19 @@ module game_main #(
   parameter ACTIVE_COLS = 640,
   parameter ACTIVE_ROWS = 480) 
   (
-  input            clk       ,
-  input            i_start   ,
-  input            i_switch_1,
-  input            i_switch_2,
-  input            i_switch_3,
-  input            i_switch_4,
-  input            i_hsync   ,
-  input            i_vsync   ,
-  output           o_hsync   ,
-  output           o_vsync   ,
-  output reg [2:0] o_vga_r   ,
-  output reg [2:0] o_vga_g   ,
-  output reg [2:0] o_vga_b   );
+  input            clk          ,
+  input            i_start      ,
+  input            i_switch_1   ,
+  input            i_switch_2   ,
+  input            i_switch_3   ,
+  input            i_switch_4   ,
+  input            i_hsync      ,
+  input            i_vsync      ,
+  output reg       o_hsync      ,
+  output reg       o_vsync      ,
+  output [3:0]     o_vga_r      ,
+  output [3:0]     o_vga_g      ,
+  output [3:0]     o_vga_b      );
 
   // states
   parameter IDLE    = 3'b000;
@@ -45,6 +45,9 @@ module game_main #(
   wire [5:0] w_ball_x = 0;
   wire [5:0] w_ball_y = 0;
   wire       w_draw_ball ;
+
+  // vga outputs
+  wire w_draw_any;
 
   // paddle and ball speed for 10 Hz
   // like LED blink: 
@@ -73,7 +76,7 @@ module game_main #(
     .o_hsync      (w_hsync)      ,
     .o_vsync      (w_vsync)      ,
     .o_col_counter(w_col_counter),
-    .o_row_counter(w_row_counter))
+    .o_row_counter(w_row_counter));
 
   always @(posedge clk ) begin
     o_hsync <= w_hsync;
@@ -169,10 +172,10 @@ module game_main #(
 
   assign w_active = (STATE == RUNNING) ? 1'b1 : 1'b0;
 
-  assign w_draw = w_draw_ball | w_paddle_1 | w_paddle_2;
+  assign w_draw_any = w_draw_ball | w_paddle_1 | w_paddle_2;
 
-  assign o_vga_r = w_Draw_Any ? 4'b1111 : 4'b0000;
-  assign o_vga_g = w_Draw_Any ? 4'b1111 : 4'b0000;
-  assign o_vga_b = w_Draw_Any ? 4'b1111 : 4'b0000;
+  assign o_vga_r = w_draw_any ? 4'b1111 : 4'b0000;
+  assign o_vga_g = w_draw_any ? 4'b1111 : 4'b0000;
+  assign o_vga_b = w_draw_any ? 4'b1111 : 4'b0000;
 
 endmodule
